@@ -10,7 +10,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.ui.Notification;
 
 import cirrus.Sections;
-import cirrus.backend.MyBackend;
+import cirrus.backend.Backend;
 
 /**
  * An operation that invokes a backend method that is available for admin users only. The operation is, however,
@@ -21,10 +21,10 @@ import cirrus.backend.MyBackend;
 @FontAwesomeIcon(FontAwesome.WRENCH)
 public class AdminOperation implements Runnable {
 
-    private final MyBackend backend;
+    private final Backend backend;
 
     @Autowired
-    public AdminOperation(MyBackend backend) {
+    public AdminOperation(Backend backend) {
         this.backend = backend;
     }
 

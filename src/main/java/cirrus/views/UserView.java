@@ -15,7 +15,7 @@ import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.VerticalLayout;
 
 import cirrus.Sections;
-import cirrus.backend.MyBackend;
+import cirrus.backend.Backend;
 
 /**
  * View that is available for all users.
@@ -26,10 +26,10 @@ import cirrus.backend.MyBackend;
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
 public class UserView extends CustomComponent implements View {
 
-    private final MyBackend backend;
+    private final Backend backend;
 
     @Autowired
-    public UserView(MyBackend backend) {
+    public UserView(Backend backend) {
         this.backend = backend;
         RichTextArea rtarea = new RichTextArea();
         setCompositionRoot(rtarea);

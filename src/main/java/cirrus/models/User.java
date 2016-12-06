@@ -15,13 +15,21 @@ public class User {
 
 	protected User() {
 	}
-
+	
 	public User(String userName, String password, String firstName, String lastName, Role role) {
 		this.userName = userName;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.role = role;
+	}
+
+	public User(String userName, String password, String firstName, String lastName, String role) {
+		this.userName = userName;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.role = Role.fromString(role);
 	}
 
 	public String getUserName() {
