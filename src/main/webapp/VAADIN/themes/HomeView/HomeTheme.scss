@@ -1,0 +1,44 @@
+@import "../reindeer/styles.css";
+
+.HomeTheme {
+	.v-layout-logonbtn-line {
+	      background-color: #4172AE;      
+	}
+	
+	.v-horizontallayout-logonbtn-line .v-button-link {
+	      display: block;
+	      background: transparent;
+	      border: none;
+	      text-align: center;
+	}
+	
+	.v-horizontallayout-logonbtn-line .v-button-link .v-button-caption {
+	    color: #fff; 
+	    font-weight:bold;
+	    text-decoration: none;
+	}
+	
+	.v-horizontallayout-logonbtn-line .v-button-link .v-button-caption:hover {
+	    color: #39849d; 
+	    text-decoration: underline;
+	}
+	
+	.v-horizontallayout-logonbtn-line .v-button {
+	      display: block;
+	      background: transparent;
+	      border: none;
+	      text-align: center;
+	}
+	
+	.v-horizontallayout-logonbtn-line .v-button img {
+	      display: block;
+	      margin-left: auto;
+	      margin-right: auto;
+	      margin-bottom: 5px;
+	}
+	
+	.v-horizontallayout-logonbtn-line .v-button span {
+	      /*font-size: x-small;*/
+	      text-shadow: #fafafa 1px 1px 0;
+	}
+}
