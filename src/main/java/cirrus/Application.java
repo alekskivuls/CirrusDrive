@@ -62,9 +62,8 @@ public class Application {
 	public CommandLineRunner loadData(UserRepository repository) {
 		return (args) -> {
 			// save a couple of customers
-			repository.save(new User("jbauer", "jb", "Jack", "Bauer", Role.ADMIN));
-			repository.save(new User("cbrian", "cb", "Chloe", "Brian", Role.USER));
-			repository.save(new User("kbauer", "kb", "Kim", "Bauer", Role.USER));
+			repository.save(new User("adoe", "ad", "Alice", "Doe", Role.ADMIN));
+			repository.save(new User("bdoe", "bd", "Bob", "Doe", Role.USER));
 			repository.save(new User("user", "password", "first", "last", Role.USER));
 			repository.save(new User("admin", "password", "first", "last", Role.ADMIN));
 
