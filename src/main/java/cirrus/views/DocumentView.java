@@ -21,15 +21,15 @@ import cirrus.backend.Backend;
  * View that is available for all users.
  */
 @Secured({"ROLE_USER", "ROLE_ADMIN"})
-@SpringView(name = "user")
-@SideBarItem(sectionId = Sections.VIEWS, caption = "User View")
+@SpringView(name = "document")
+@SideBarItem(sectionId = Sections.VIEWS, caption = "Document View")
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
-public class UserView extends CustomComponent implements View {
+public class DocumentView extends CustomComponent implements View {
 
     private final Backend backend;
 
     @Autowired
-    public UserView(Backend backend) {
+    public DocumentView(Backend backend) {
         this.backend = backend;
         RichTextArea rtarea = new RichTextArea();
         setCompositionRoot(rtarea);

@@ -73,7 +73,7 @@ public class Application {
 			}
 
 			// fetch an individual customer by ID
-			User user = repository.findOne("user");
+			User user = repository.findByUserName("user");
 			System.out.println("User found with findOne(user):");
 			System.out.println("--------------------------------");
 			System.out.println(user.toString());

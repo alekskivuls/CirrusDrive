@@ -16,9 +16,9 @@ public class Document {
 	private String docBody;
 	
 	@ManyToOne
-	private String docOwner;
+	private User docOwner;
 	
-	public Document(String docName, String ownerUserName) {
+	public Document(String docName, User ownerUserName) {
 		this.docName = docName;
 		this.docOwner = ownerUserName;
 		this.docBody = "";
@@ -36,7 +36,7 @@ public class Document {
 		return docId;
 	}
 	
-	public String getDocOwner(){
+	public User getDocOwner(){
 		return docOwner;
 	}
 
@@ -44,7 +44,7 @@ public class Document {
 		return docBody;
 	}
 
-	public void setDocOwner(String docOwner) {
+	public void setDocOwner(User docOwner) {
 		this.docOwner = docOwner;
 	}
 

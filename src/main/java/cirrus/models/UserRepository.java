@@ -5,5 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, String> {
 
-	List<User> findByLastNameStartsWithIgnoreCase(String userName);
+	User findByUserName(String userName);
+	
+	List<User> findByLastNameStartsWithIgnoreCase(String lastName);
 }
