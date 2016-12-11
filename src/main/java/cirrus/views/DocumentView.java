@@ -4,7 +4,6 @@ package cirrus.views;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
-import org.vaadin.spring.sidebar.annotation.SideBarItem;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -17,7 +16,6 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-import cirrus.Sections;
 import cirrus.backend.DocumentBackend;
 
 /**
@@ -25,7 +23,7 @@ import cirrus.backend.DocumentBackend;
  */
 @Secured({"ROLE_USER", "ROLE_ADMIN"})
 @SpringView(name = "document")
-@SideBarItem(sectionId = Sections.VIEWS, caption = "Document View")
+//@SideBarItem(sectionId = Sections.VIEWS, caption = "Document View")
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
 public class DocumentView extends VerticalLayout implements View {
 

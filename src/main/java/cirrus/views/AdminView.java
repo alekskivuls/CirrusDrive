@@ -24,7 +24,7 @@ import com.vaadin.ui.Select;
 import com.vaadin.ui.TextField;
 
 import cirrus.Sections;
-import cirrus.backend.Backend;
+import cirrus.backend.AdminBackend;
 import cirrus.models.User;
 
 /**
@@ -36,12 +36,12 @@ import cirrus.models.User;
 @FontAwesomeIcon(FontAwesome.COGS)
 public class AdminView extends CustomComponent implements View {
 
-	private final Backend backend;
+	private final AdminBackend mBackend;
 
 	@SuppressWarnings("deprecation")
 	@Autowired
-	public AdminView(Backend backend) {
-		this.backend = backend;
+	public AdminView(AdminBackend backend) {
+		this.mBackend = backend;
 		
 		PropertysetItem item = new PropertysetItem();
 		item.addItemProperty("fName", new ObjectProperty<String>(""));
@@ -90,9 +90,9 @@ public class AdminView extends CustomComponent implements View {
 		Button button = new Button("Create user", new Button.ClickListener() {
 			@Override
 			public void buttonClick(Button.ClickEvent event) {
-				Notification.show(AdminView.this.backend.adminOnlyEcho("User created"));
 				User user = new User(binder.getField("username").toString(),binder.getField("password").toString(),binder.getField("fName").toString(),binder.getField("lName").toString(),binder.getField("role").toString());
-				AdminView.this.backend.createAccount(user);
+				AdminView.this.mBackend.createAccount(user);
+				Notification.show("User created");
 			}
 		});
 		form.addComponent(button);

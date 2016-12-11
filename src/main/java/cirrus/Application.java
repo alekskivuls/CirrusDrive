@@ -15,8 +15,10 @@ import com.vaadin.server.SystemMessages;
 import com.vaadin.server.SystemMessagesInfo;
 import com.vaadin.server.SystemMessagesProvider;
 
+import cirrus.models.Document;
 import cirrus.models.Role;
 import cirrus.models.User;
+import cirrus.repositories.DocumentRepository;
 import cirrus.repositories.UserRepository;
 import cirrus.services.UsersService;
 
@@ -59,13 +61,15 @@ public class Application {
 	}
 
 	@Bean
-	public CommandLineRunner loadData(UserRepository repository) {
+	public CommandLineRunner loadData(UserRepository repository, DocumentRepository docRepo) {
 		return (args) -> {
 			// save a couple of customers
 			repository.save(new User("adoe", "ad", "Alice", "Doe", Role.ADMIN));
 			repository.save(new User("bdoe", "bd", "Bob", "Doe", Role.USER));
-			repository.save(new User("user", "password", "first", "last", Role.USER));
-			repository.save(new User("admin", "password", "first", "last", Role.ADMIN));
+			User regular = new User("user", "password", "first", "last", Role.USER);
+			repository.save(regular);
+			User admin = new User("admin", "password", "first", "last", Role.ADMIN);
+			repository.save(admin);
 
 			// fetch all users
 			for (User user : repository.findAll()) {
@@ -87,6 +91,23 @@ public class Application {
 				System.out.println(u.toString());
 			}
 			System.out.println();
+			
+			Document doc1 = new Document("Doc1", admin);
+			docRepo.save(doc1);
+			Document doc2 = new Document("Doc2", regular);
+			docRepo.save(doc2);
+			Document doc3 = new Document("Doc3", admin);
+			docRepo.save(doc3);
+			Document doc4 = new Document("Doc4", admin);
+			docRepo.save(doc4);
+			
+			System.out.println("Documents found with findByDocOwner(admin): ");
+			System.out.println("--------------------------------");
+			for (Document doc : docRepo.findByDocOwner(admin)) {
+				System.out.println(doc.toString());
+			}
+			System.out.println();
+			
 		};
 	}
     

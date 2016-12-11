@@ -1,9 +1,12 @@
 package cirrus.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cirrus.models.Document;
+import cirrus.models.User;
 import cirrus.repositories.DocumentRepository;
 
 @Service
@@ -24,5 +27,9 @@ public class DocumentsService {
 		Document doc = getDocument(docId);
 		doc.setDocBody(body);
 		repo.save(doc);
+	}
+	
+	public List<Document> getUserDocuments(User user) {
+		return repo.findByDocOwner(user);
 	}
 }

@@ -8,7 +8,6 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
@@ -20,6 +19,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import cirrus.Sections;
 import cirrus.backend.Backend;
+import cirrus.models.Document;
 
 /**
  * When the user logs in and there is no view to navigate to, this view will be shown.
@@ -43,13 +43,6 @@ public class HomeView extends VerticalLayout implements View {
         //header.setSizeUndefined();
         addComponent(header);
         
-        
-        Label body = new Label("<p>This is the body. Formatted with html.</p>");
-        body.setContentMode(ContentMode.HTML);
-        //body.setSizeFull();
-        //body.setSizeUndefined();
-        addComponent(body);
-        
         Panel panel = createPanel();
         addComponent(panel);
         this.setExpandRatio(panel, 1.0f);
@@ -60,6 +53,14 @@ public class HomeView extends VerticalLayout implements View {
         CssLayout layout = new CssLayout();
         layout.setSizeFull();//layout.setSizeFull();
         
+        for(Document doc : mBackend.getUsersDocs()) {
+            Button button = new Button(doc.getDocName());
+            button.setIcon(FontAwesome.FOLDER);
+            button.addStyleName(BaseTheme.BUTTON_LINK);
+            layout.addComponent(button);
+        }
+        
+        /*
         // Create three equally expanding components.
         for (int i = 1; i <= 200; i++) {
         	// THIS BUTTON'S NAME SHOULD BE THE DOCUMENT'S NAME
@@ -77,7 +78,7 @@ public class HomeView extends VerticalLayout implements View {
             // Have uniform 1:1:1 expand ratio.
             //layout.setExpandRatio(button, 1.0f);
             
-        }
+        }*/
         
         panel.setSizeFull();
         panel.setContent(layout);

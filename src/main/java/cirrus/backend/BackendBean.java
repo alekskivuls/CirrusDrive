@@ -1,33 +1,39 @@
-
 package cirrus.backend;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.vaadin.spring.security.VaadinSecurity;
 
+import cirrus.models.Document;
 import cirrus.models.User;
-import cirrus.repositories.UserRepository;
+import cirrus.services.DocumentsService;
+import cirrus.services.UsersService;
 
-/**
- * Implementation of {@link cirrus.backend.Backend}.
- */
 @Service
 public class BackendBean implements Backend {
 
 	@Autowired
-	UserRepository userRepo;
+	VaadinSecurity vaadinSecurity;
+	
+	@Autowired
+	UsersService userService;
+	
+	@Autowired
+	DocumentsService docsService;
 	
 	@Override
-	public String adminOnlyEcho(String s) {
-		return "admin:" + s;
+	public User getCurrentUser() {
+		String userName = vaadinSecurity.getAuthentication().getName();
+		return userService.getUser(userName);
 	}
 
 	@Override
-	public String echo(String s) {
-		return s;
+	public List<Document> getUsersDocs() {
+		return docsService.getUserDocuments(getCurrentUser());
 	}
+	
+	
 
-	@Override
-	public void createAccount(User user) {
-		userRepo.save(user);
-	}
 }

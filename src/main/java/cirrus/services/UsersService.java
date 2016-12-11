@@ -42,4 +42,7 @@ public class UsersService implements UserDetailsService {
 				auth);
 	}
 
+	public User getUser(String userName) {
+		return repo.findByUserName(userName);
+	}
 }

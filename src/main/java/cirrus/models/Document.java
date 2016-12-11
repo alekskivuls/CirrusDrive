@@ -18,6 +18,9 @@ public class Document {
 	@ManyToOne
 	private User docOwner;
 	
+	protected Document() {
+	}
+	
 	public Document(String docName, User ownerUserName) {
 		this.docName = docName;
 		this.docOwner = ownerUserName;
