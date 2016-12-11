@@ -4,21 +4,21 @@ package cirrus.views;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
+import org.vaadin.spring.sidebar.annotation.SideBarItem;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
+import cirrus.Sections;
 import cirrus.backend.DocumentBackend;
 
 /**
@@ -26,7 +26,7 @@ import cirrus.backend.DocumentBackend;
  */
 @Secured({"ROLE_USER", "ROLE_ADMIN"})
 @SpringView(name = "document")
-//@SideBarItem(sectionId = Sections.VIEWS, caption = "Document View")
+@SideBarItem(sectionId = Sections.VIEWS, caption = "Document View")
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
 public class DocumentView extends VerticalLayout implements View {
 
