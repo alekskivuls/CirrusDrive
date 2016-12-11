@@ -35,7 +35,15 @@ public class Document {
 	public int getDocId() {
 		return docId;
 	}
-	
+
+	public void setDocId(int docId) {
+		this.docId = docId;
+	}
+
+	public void setDocBody(String docBody) {
+		this.docBody = docBody;
+	}
+
 	public User getDocOwner(){
 		return docOwner;
 	}

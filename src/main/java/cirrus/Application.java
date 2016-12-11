@@ -17,8 +17,8 @@ import com.vaadin.server.SystemMessagesProvider;
 
 import cirrus.models.Role;
 import cirrus.models.User;
-import cirrus.models.UserRepository;
-import cirrus.models.UsersService;
+import cirrus.repositories.UserRepository;
+import cirrus.services.UsersService;
 
 @SpringBootApplication(exclude = org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class)
 @EnableVaadinManagedSecurity

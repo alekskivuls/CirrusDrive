@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cirrus.models.User;
-import cirrus.models.UserRepository;
+import cirrus.repositories.UserRepository;
 
 /**
  * Implementation of {@link cirrus.backend.Backend}.
