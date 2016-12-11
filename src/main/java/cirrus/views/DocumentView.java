@@ -26,11 +26,11 @@ import cirrus.backend.Backend;
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
 public class DocumentView extends CustomComponent implements View {
 
-    private final Backend backend;
+    private final Backend mBackend;
 
     @Autowired
     public DocumentView(Backend backend) {
-        this.backend = backend;
+        this.mBackend = backend;
         RichTextArea rtarea = new RichTextArea();
         setCompositionRoot(rtarea);
         
