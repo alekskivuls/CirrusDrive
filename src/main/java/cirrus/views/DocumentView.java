@@ -21,6 +21,7 @@ import com.vaadin.ui.VerticalLayout;
 import cirrus.Sections;
 import cirrus.backend.DocumentBackend;
 import cirrus.models.Document;
+import cirrus.services.UsersService;
 
 /**
  * View that is available for all users.
@@ -35,6 +36,7 @@ public class DocumentView extends VerticalLayout implements View {
 
 	TextField docName;
 	TextArea docBody;
+	Integer docId;
 
 	@Autowired
 	public DocumentView(DocumentBackend backend) {
@@ -56,7 +58,16 @@ public class DocumentView extends VerticalLayout implements View {
 		save.setSizeFull();
 		save.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
-
+				Document doc;
+				if(docId == null) {
+					doc = new Document(mBackend.getCurrentUser(),docName.getValue(), docBody.getValue());
+					docId = doc.getDocId();
+				} else {
+					doc = mBackend.getDocument(docId);
+					doc.setDocName(docName.getValue());
+					doc.setDocBody(docBody.getValue());
+				}
+				mBackend.saveDocument(doc);
 			}
 		});
 		toolbar.addComponent(save);
@@ -66,7 +77,9 @@ public class DocumentView extends VerticalLayout implements View {
 		trash.setSizeFull();
 		trash.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
-
+				if(docId != null)
+					mBackend.deleteDocument(docId);
+				getUI().getNavigator().navigateTo("");
 			}
 		});
 		toolbar.addComponent(trash);
@@ -95,7 +108,7 @@ public class DocumentView extends VerticalLayout implements View {
 	public void enter(ViewChangeEvent event) {
 		if (event.getParameters() != null) {
 			try {
-				int docId = Integer.parseInt(event.getParameters());
+				docId = Integer.parseInt(event.getParameters());
 				Document doc = mBackend.getDocument(docId);
 				docName.setValue(doc.getDocName());
 				docBody.setValue(doc.getDocBody());

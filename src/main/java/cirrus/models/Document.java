@@ -21,10 +21,16 @@ public class Document {
 	protected Document() {
 	}
 	
-	public Document(String docName, User ownerUserName) {
+	public Document(User ownerUserName, String docName) {
 		this.docName = docName;
 		this.docOwner = ownerUserName;
 		this.docBody = "";
+	}
+	
+	public Document(User ownerUserName, String docName, String docBody) {
+		this.docName = docName;
+		this.docOwner = ownerUserName;
+		this.docBody = docBody;
 	}
 
 	public String getDocName() {

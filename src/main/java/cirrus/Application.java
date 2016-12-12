@@ -20,6 +20,7 @@ import cirrus.models.Role;
 import cirrus.models.User;
 import cirrus.repositories.DocumentRepository;
 import cirrus.repositories.UserRepository;
+import cirrus.services.UsersDetailService;
 import cirrus.services.UsersService;
 
 @SpringBootApplication(exclude = org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class)
@@ -52,7 +53,7 @@ public class Application {
     static class AuthenticationConfiguration implements AuthenticationManagerConfigurer {
 
     	@Autowired
-		private UsersService users;
+		private UsersDetailService users;
     	
         @Override
         public void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -92,14 +93,14 @@ public class Application {
 			}
 			System.out.println();
 			
-			Document doc1 = new Document("Doc1", admin);
+			Document doc1 = new Document(admin, "Doc1");
 			doc1.setDocBody("body");
 			docRepo.save(doc1);
-			Document doc2 = new Document("Doc2", regular);
+			Document doc2 = new Document(regular, "Doc2");
 			docRepo.save(doc2);
-			Document doc3 = new Document("Doc3", admin);
+			Document doc3 = new Document(admin, "Doc3");
 			docRepo.save(doc3);
-			Document doc4 = new Document("Doc4", admin);
+			Document doc4 = new Document(admin, "Doc4");
 			docRepo.save(doc4);
 			
 			System.out.println("Documents found with findByDocOwner(admin): ");

@@ -9,7 +9,5 @@ import cirrus.models.User;
 
 public interface Backend {
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	User getCurrentUser();
-
 	List<Document> getUsersDocs();
 }
