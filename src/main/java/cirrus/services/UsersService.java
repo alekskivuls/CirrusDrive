@@ -15,11 +15,11 @@ public class UsersService {
 
 	@Autowired
 	VaadinSecurity vaadinSecurity;
-	
+
 	public User getUser(String userName) {
 		return repo.findByUserName(userName);
 	}
-	
+
 	public User getCurrentUser() {
 		String userName = vaadinSecurity.getAuthentication().getName();
 		return getUser(userName);

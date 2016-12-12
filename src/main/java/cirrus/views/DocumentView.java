@@ -21,10 +21,9 @@ import com.vaadin.ui.VerticalLayout;
 import cirrus.Sections;
 import cirrus.backend.DocumentBackend;
 import cirrus.models.Document;
-import cirrus.services.UsersService;
 
 /**
- * View that is available for all users.
+ * View for view documents.
  */
 @Secured({ "ROLE_USER", "ROLE_ADMIN" })
 @SpringView(name = "document")
@@ -45,13 +44,11 @@ public class DocumentView extends VerticalLayout implements View {
 		setMargin(true);
 
 		docName = new TextField();
-		// docName.setSizeFull();
 		docName.setSizeUndefined();
 		addComponent(docName);
 
 		HorizontalLayout toolbar = new HorizontalLayout();
 		toolbar.setSizeUndefined();
-		// toolbar.setSizeFull();
 
 		Button save = new Button();
 		save.setIcon(FontAwesome.SAVE);
@@ -59,8 +56,8 @@ public class DocumentView extends VerticalLayout implements View {
 		save.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
 				Document doc;
-				if(docId == null) {
-					doc = new Document(mBackend.getCurrentUser(),docName.getValue(), docBody.getValue());
+				if (docId == null) {
+					doc = new Document(mBackend.getCurrentUser(), docName.getValue(), docBody.getValue());
 					docId = doc.getDocId();
 				} else {
 					doc = mBackend.getDocument(docId);
@@ -77,7 +74,7 @@ public class DocumentView extends VerticalLayout implements View {
 		trash.setSizeFull();
 		trash.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
-				if(docId != null)
+				if (docId != null)
 					mBackend.deleteDocument(docId);
 				getUI().getNavigator().navigateTo("");
 			}
@@ -94,13 +91,10 @@ public class DocumentView extends VerticalLayout implements View {
 	Panel createPanel() {
 		Panel panel = new Panel();
 		docBody = new TextArea();
-		// textArea.setSizeUndefined();
 		docBody.setSizeFull();
 
 		panel.setSizeFull();
-		// panel.setSizeUndefined();
 		panel.setContent(docBody);
-		// panel.getContent().setSizeUndefined();
 		return panel;
 	}
 

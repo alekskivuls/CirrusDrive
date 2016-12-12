@@ -42,7 +42,7 @@ public class AdminView extends CustomComponent implements View {
 	@Autowired
 	public AdminView(AdminBackend backend) {
 		this.mBackend = backend;
-		
+
 		PropertysetItem item = new PropertysetItem();
 		item.addItemProperty("fName", new ObjectProperty<String>(""));
 		item.addItemProperty("lName", new ObjectProperty<String>(""));
@@ -72,7 +72,7 @@ public class AdminView extends CustomComponent implements View {
 		tf3.setRequired(true);
 		tf3.addValidator(new NullValidator("Must be given", false));
 		form.addComponent(tf3);
-		
+
 		PasswordField tf4 = new PasswordField("Password");
 		binder.bind(tf4, "password");
 		tf4.setIcon(FontAwesome.KEY);
@@ -82,26 +82,26 @@ public class AdminView extends CustomComponent implements View {
 
 		Select select = new Select("Role");
 		binder.bind(select, "role");
-        select.addItem("User");
-        select.addItem("Admin");
-        select.setRequired(true);
-        form.addComponent(select);
-		
+		select.addItem("User");
+		select.addItem("Admin");
+		select.setRequired(true);
+		form.addComponent(select);
+
 		Button button = new Button("Create user", new Button.ClickListener() {
 			@Override
 			public void buttonClick(Button.ClickEvent event) {
-				User user = new User(binder.getField("username").toString(),binder.getField("password").toString(),binder.getField("fName").toString(),binder.getField("lName").toString(),binder.getField("role").toString());
+				User user = new User(binder.getField("username").toString(), binder.getField("password").toString(),
+						binder.getField("fName").toString(), binder.getField("lName").toString(),
+						binder.getField("role").toString());
 				AdminView.this.mBackend.createAccount(user);
 				Notification.show("User created");
 			}
 		});
 		form.addComponent(button);
-		
-		//FIXME Hack needs layout
+
 		form.setMargin(new MarginInfo(15));
 		setCompositionRoot(form);
-		
-		
+
 	}
 
 	@Override

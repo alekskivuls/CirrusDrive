@@ -61,6 +61,9 @@ public class Application {
 		}
 	}
 
+    /**
+     * Insert data in the database for development purposes
+     */
 	@Bean
 	public CommandLineRunner loadData(UserRepository repository, DocumentRepository docRepo) {
 		return (args) -> {
@@ -93,6 +96,7 @@ public class Application {
 			}
 			System.out.println();
 			
+			// save a couple docs
 			Document doc1 = new Document(admin, "Doc1");
 			doc1.setDocBody("body");
 			docRepo.save(doc1);

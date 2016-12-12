@@ -8,7 +8,7 @@ import cirrus.models.User;
 import cirrus.repositories.UserRepository;
 
 /**
- * Implementation of {@link cirrus.backend.Backend}.
+ * Implementation of {@link cirrus.backend.AdminBackend}.
  */
 @Service
 public class AdminBackendBean implements AdminBackend {

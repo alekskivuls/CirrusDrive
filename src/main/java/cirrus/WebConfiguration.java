@@ -5,6 +5,9 @@ import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
  
+/**
+ * Enable h2 console for database debugging
+ */
 @Configuration
 public class WebConfiguration {
     @Bean
