@@ -93,6 +93,7 @@ public class Application {
 			System.out.println();
 			
 			Document doc1 = new Document("Doc1", admin);
+			doc1.setDocBody("body");
 			docRepo.save(doc1);
 			Document doc2 = new Document("Doc2", regular);
 			docRepo.save(doc2);

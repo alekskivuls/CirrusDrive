@@ -7,5 +7,8 @@ import cirrus.models.Document;
 
 public interface DocumentBackend {
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-	String saveDoc(String docContents);
+	String saveDocument(String docContents);
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+	Document getDocument(int docId);
 }

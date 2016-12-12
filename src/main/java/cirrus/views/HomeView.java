@@ -1,15 +1,18 @@
 
 package cirrus.views;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
 
 import com.vaadin.annotations.Theme;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
@@ -32,7 +35,7 @@ public class HomeView extends VerticalLayout implements View {
 	final Backend mBackend;
 	
     public HomeView(Backend backend) {// @import "HomeTheme.scss";
-    	this.mBackend = backend;
+		this.mBackend = backend;
     	setSizeFull();
     	//setSizeUndefined();
         setMargin(true);
@@ -55,8 +58,15 @@ public class HomeView extends VerticalLayout implements View {
         
         for(Document doc : mBackend.getUsersDocs()) {
             Button button = new Button(doc.getDocName());
+            button.setData(doc);
             button.setIcon(FontAwesome.FOLDER);
             button.addStyleName(BaseTheme.BUTTON_LINK);
+            button.addClickListener(new Button.ClickListener() {
+                public void buttonClick(ClickEvent event) {
+                    Document doc = (Document) event.getButton().getData();
+                    getUI().getNavigator().navigateTo("document/"+doc.getDocId());
+                }
+            });
             layout.addComponent(button);
         }
         
