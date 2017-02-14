@@ -49,11 +49,18 @@ public class HomeView extends VerticalLayout implements View {
 		titleBar.addComponent(header);
 		titleBar.setExpandRatio(header, 1.0f);
 		
-		Button addDoc = new Button(FontAwesome.PLUS);
-		addDoc.setDescription("Add a new document");
-		addDoc.setSizeUndefined();
-		titleBar.addComponent(addDoc);
-		titleBar.setComponentAlignment(addDoc, Alignment.TOP_RIGHT);
+		Button addDocBtn = new Button(FontAwesome.PLUS);
+		addDocBtn.setDescription("Add a new document");
+		addDocBtn.setSizeUndefined();
+		
+		addDocBtn.addClickListener(new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				getUI().getNavigator().navigateTo("document");
+			}
+		});
+		
+		titleBar.addComponent(addDocBtn);
+		titleBar.setComponentAlignment(addDocBtn, Alignment.TOP_RIGHT);
 		
 		addComponent(titleBar);
 
@@ -61,7 +68,8 @@ public class HomeView extends VerticalLayout implements View {
 		addComponent(panel);
 		this.setExpandRatio(panel, 1.0f);
 	}
-
+	
+	// document list
 	Panel createPanel() {
 		Panel panel = new Panel();
 		CssLayout layout = new CssLayout();
