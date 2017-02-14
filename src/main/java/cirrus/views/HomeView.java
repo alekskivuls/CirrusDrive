@@ -8,10 +8,13 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Sizeable;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
@@ -38,9 +41,21 @@ public class HomeView extends VerticalLayout implements View {
 		setSizeFull();
 		setMargin(true);
 
+		HorizontalLayout titleBar = new HorizontalLayout();
+		titleBar.setWidth(95, Unit.PERCENTAGE);
+		
 		Label header = new Label("Welcome to Cirrus Drive!");
 		header.addStyleName(ValoTheme.LABEL_H1);
-		addComponent(header);
+		titleBar.addComponent(header);
+		titleBar.setExpandRatio(header, 1.0f);
+		
+		Button addDoc = new Button(FontAwesome.PLUS);
+		addDoc.setDescription("Add a new document");
+		addDoc.setSizeUndefined();
+		titleBar.addComponent(addDoc);
+		titleBar.setComponentAlignment(addDoc, Alignment.TOP_RIGHT);
+		
+		addComponent(titleBar);
 
 		Panel panel = createPanel();
 		addComponent(panel);
