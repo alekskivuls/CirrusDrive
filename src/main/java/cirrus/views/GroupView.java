@@ -29,14 +29,14 @@ import cirrus.models.Document;
  * When the user logs in and there is no view to navigate to, this view will be
  * shown.
  */
-@Theme("valo")
-@SpringView(name = "")
-@SideBarItem(sectionId = Sections.VIEWS, caption = "Home", order = 0)
-@FontAwesomeIcon(FontAwesome.HOME)
-public class HomeView extends VerticalLayout implements View {
+
+@SpringView(name = "groups")
+@SideBarItem(sectionId = Sections.VIEWS, caption = "Group View")
+@FontAwesomeIcon(FontAwesome.GROUP)
+public class GroupView extends VerticalLayout implements View {
 	final Backend mBackend;
 
-	public HomeView(Backend backend) {
+	public GroupView(Backend backend) {
 		this.mBackend = backend;
 		setSizeFull();
 		setMargin(true);
@@ -44,23 +44,23 @@ public class HomeView extends VerticalLayout implements View {
 		HorizontalLayout titleBar = new HorizontalLayout();
 		titleBar.setWidth(95, Unit.PERCENTAGE);
 		
-		Label header = new Label("Welcome to Cirrus Drive!");
+		Label header = new Label("My Groups");
 		header.addStyleName(ValoTheme.LABEL_H1);
 		titleBar.addComponent(header);
 		titleBar.setExpandRatio(header, 1.0f);
 		
-		Button addDocBtn = new Button(FontAwesome.PLUS);
-		addDocBtn.setDescription("Add a new document");
-		addDocBtn.setSizeUndefined();
+		Button addGroupBtn = new Button(FontAwesome.PLUS);
+		addGroupBtn.setDescription("Add a new group");
+		addGroupBtn.setSizeUndefined();
 		
-		addDocBtn.addClickListener(new Button.ClickListener() {
+		addGroupBtn.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
-				getUI().getNavigator().navigateTo("document");
+				// create and display a new group
 			}
 		});
 		
-		titleBar.addComponent(addDocBtn);
-		titleBar.setComponentAlignment(addDocBtn, Alignment.TOP_RIGHT);
+		titleBar.addComponent(addGroupBtn);
+		titleBar.setComponentAlignment(addGroupBtn, Alignment.TOP_RIGHT);
 		
 		addComponent(titleBar);
 
@@ -69,25 +69,11 @@ public class HomeView extends VerticalLayout implements View {
 		this.setExpandRatio(panel, 1.0f);
 	}
 	
-	// document list
+	// group list
 	Panel createPanel() {
 		Panel panel = new Panel();
 		CssLayout layout = new CssLayout();
 		layout.setSizeFull();
-
-		for (Document doc : mBackend.getUsersDocs()) {
-			Button button = new Button(doc.getDocName());
-			button.setData(doc);
-			button.setIcon(FontAwesome.FOLDER);
-			button.addStyleName(BaseTheme.BUTTON_LINK);
-			button.addClickListener(new Button.ClickListener() {
-				public void buttonClick(ClickEvent event) {
-					Document doc = (Document) event.getButton().getData();
-					getUI().getNavigator().navigateTo("document/" + doc.getDocId());
-				}
-			});
-			layout.addComponent(button);
-		}
 
 		panel.setSizeFull();
 		panel.setContent(layout);

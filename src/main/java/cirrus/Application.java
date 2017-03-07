@@ -1,5 +1,7 @@
 package cirrus;
 
+import java.util.HashSet;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,8 +20,10 @@ import com.vaadin.server.SystemMessagesProvider;
 import cirrus.models.Document;
 import cirrus.models.Role;
 import cirrus.models.User;
+import cirrus.models.UserGroup;
 import cirrus.repositories.DocumentRepository;
 import cirrus.repositories.UserRepository;
+import cirrus.repositories.GroupRepository;
 import cirrus.services.UsersDetailService;
 import cirrus.services.UsersService;
 
@@ -65,7 +69,7 @@ public class Application {
      * Insert data in the database for development purposes
      */
 	@Bean
-	public CommandLineRunner loadData(UserRepository repository, DocumentRepository docRepo) {
+	public CommandLineRunner loadData(UserRepository repository, DocumentRepository docRepo, GroupRepository groupRepo) {
 		return (args) -> {
 			// save a couple of customers
 			repository.save(new User("adoe", "ad", "Alice", "Doe", Role.ADMIN));
@@ -112,6 +116,19 @@ public class Application {
 			for (Document doc : docRepo.findByDocOwner(admin)) {
 				System.out.println(doc.toString());
 			}
+			System.out.println();
+			
+			UserGroup group1 = new UserGroup("regGroup", regular);
+			groupRepo.save(group1);
+			UserGroup group2 = new UserGroup("adminGroup1", admin);
+			groupRepo.save(group2);
+			UserGroup group3 = new UserGroup("adminGroup2", admin);
+			groupRepo.save(group3);
+			
+			System.out.println("Groups found with findByGroupLabel(\"regGroup\"): ");
+			System.out.println("--------------------------------");
+			UserGroup regGrp = groupRepo.findByGroupLabel("regGroup");
+			System.out.println(regGrp.toString());
 			System.out.println();
 			
 		};

@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 
 
 @Entity
-public class Group {
+public class UserGroup {
 	
 	@Id
 	@GeneratedValue( strategy = GenerationType.AUTO)
@@ -22,14 +22,16 @@ public class Group {
 	private User groupOwner;
 	
 
-	protected Group(){
+	protected UserGroup() {
 	}
 	
-	public Group(String groupLabel, User groupOwner) {
-		
+	public UserGroup(String groupLabel, User groupOwner) {
+		this.groupLabel = groupLabel;
+		this.groupOwner = groupOwner;
+		this.groupMembers = new HashSet<User>();
 	}
 	
-	public Group(String groupLabel, User groupOwner, HashSet<User> groupMembers){
+	public UserGroup(String groupLabel, User groupOwner, HashSet<User> groupMembers){
 		this.groupLabel = groupLabel;
 		this.groupOwner = groupOwner;
 		this.groupMembers = groupMembers;
