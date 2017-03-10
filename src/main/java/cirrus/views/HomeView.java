@@ -38,7 +38,7 @@ import cirrus.models.Document;
  * When the user logs in and there is no view to navigate to, this view will be
  * shown.
  */
-@Theme("HomeTheme")
+@Theme("valo")
 @SpringView(name = "")
 @SideBarItem(sectionId = Sections.VIEWS, caption = "Home", order = 0)
 @FontAwesomeIcon(FontAwesome.HOME)
