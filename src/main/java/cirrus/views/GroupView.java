@@ -62,7 +62,7 @@ public class GroupView extends VerticalLayout implements View {
 			subContent.addComponent(buttons);
 			
 			
-			newGroupLabel.addComponent(new Label("Enter group name: c"));
+			newGroupLabel.addComponent(new Label("Enter group name:   "));
 			newGroupLabel.addComponent(new TextField());
 			buttons.addComponent(new Button("OK"));
 			buttons.addComponent(new Button("Cancel", event -> close()));
