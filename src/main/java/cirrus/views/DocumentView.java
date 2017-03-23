@@ -38,7 +38,8 @@ public class DocumentView extends VerticalLayout implements View {
 	Integer docId;
 
 	@Autowired
-	public DocumentView(DocumentBackend backend) {
+	public DocumentView(DocumentBackend backend)
+	{
 		this.mBackend = backend;
 		setSizeFull();
 		setMargin(true);
@@ -53,13 +54,18 @@ public class DocumentView extends VerticalLayout implements View {
 		Button save = new Button();
 		save.setIcon(FontAwesome.SAVE);
 		save.setSizeFull();
-		save.addClickListener(new Button.ClickListener() {
-			public void buttonClick(ClickEvent event) {
+		save.addClickListener(new Button.ClickListener()
+		{
+			public void buttonClick(ClickEvent event)
+			{
 				Document doc;
-				if (docId == null) {
+				if (docId == null)
+				{
 					doc = new Document(mBackend.getCurrentUser(), docName.getValue(), docBody.getValue());
 					docId = doc.getDocId();
-				} else {
+				}
+				else
+				{
 					doc = mBackend.getDocument(docId);
 					doc.setDocName(docName.getValue());
 					doc.setDocBody(docBody.getValue());
@@ -72,8 +78,10 @@ public class DocumentView extends VerticalLayout implements View {
 		Button trash = new Button();
 		trash.setIcon(FontAwesome.TRASH);
 		trash.setSizeFull();
-		trash.addClickListener(new Button.ClickListener() {
-			public void buttonClick(ClickEvent event) {
+		trash.addClickListener(new Button.ClickListener()
+		{
+			public void buttonClick(ClickEvent event)
+			{
 				if (docId != null)
 					mBackend.deleteDocument(docId);
 				getUI().getNavigator().navigateTo("");
@@ -88,9 +96,11 @@ public class DocumentView extends VerticalLayout implements View {
 		this.setExpandRatio(panel, 1.0f);
 	}
 
-	Panel createPanel() {
+	private Panel createPanel()
+	{
 		Panel panel = new Panel();
 		docBody = new TextArea();
+		docBody.setWordwrap(false);
 		docBody.setSizeFull();
 
 		panel.setSizeFull();
@@ -99,8 +109,10 @@ public class DocumentView extends VerticalLayout implements View {
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event) {
-		if (event.getParameters() != null) {
+	public void enter(ViewChangeEvent event)
+	{
+		if (event.getParameters() != null)
+		{
 			try {
 				docId = Integer.parseInt(event.getParameters());
 				Document doc = mBackend.getDocument(docId);

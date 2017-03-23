@@ -12,6 +12,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.server.Sizeable;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -49,7 +50,8 @@ public class HomeView extends VerticalLayout implements View {
 	private Panel sidePanel;
 	private long clickTimer;
 
-	public HomeView(Backend backend) {
+	public HomeView(Backend backend)
+	{
 		this.mBackend = backend;
 		setSizeFull();
 		setMargin(true);
@@ -66,8 +68,10 @@ public class HomeView extends VerticalLayout implements View {
 		addDocBtn.setDescription("Add a new document");
 		addDocBtn.setSizeUndefined();
 		
-		addDocBtn.addClickListener(new Button.ClickListener() {
-			public void buttonClick(ClickEvent event) {
+		addDocBtn.addClickListener(new Button.ClickListener()
+		{
+			public void buttonClick(ClickEvent event)
+			{
 				getUI().getNavigator().navigateTo("document");
 			}
 		});
@@ -106,18 +110,22 @@ public class HomeView extends VerticalLayout implements View {
 	}
 	
 	// document list
-	Panel createPanel() {
+	private Panel createPanel()
+	{
 		Panel panel = new Panel();
 		CssLayout layout = new CssLayout();
 		layout.setSizeFull();
 		
-		for (Document doc : mBackend.getUsersDocs())  {
+		for (Document doc : mBackend.getUsersDocs())
+		{
 			Button button = new Button(doc.getDocName());
 			button.setData(doc);
 			button.setIcon(FontAwesome.FOLDER);
 			button.addStyleName(BaseTheme.BUTTON_LINK);
-			button.addClickListener(new Button.ClickListener() {
-				public void buttonClick(ClickEvent event) {
+			button.addClickListener(new Button.ClickListener()
+			{
+				public void buttonClick(ClickEvent event)
+				{
 					Document doc = (Document) event.getButton().getData();
 					if (doubleClicked && bTemp.equals(event.getButton()) && System.currentTimeMillis()-clickTimer < 500) {
 						getUI().getNavigator().navigateTo("document/" + doc.getDocId());
