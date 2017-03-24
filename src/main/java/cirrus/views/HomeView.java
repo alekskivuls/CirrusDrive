@@ -1,37 +1,27 @@
 package cirrus.views;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
+
 import com.vaadin.annotations.Theme;
-import com.vaadin.data.util.MethodProperty;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Page;
-import com.vaadin.server.Sizeable;
-import com.vaadin.server.AbstractErrorMessage.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.AbstractField;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.themes.ValoTheme;
+
 import cirrus.Sections;
 import cirrus.backend.Backend;
 import cirrus.backend.DocumentBackend;
@@ -53,8 +43,9 @@ public class HomeView extends VerticalLayout implements View {
 	private Panel sidePanel;
 	private long clickTimer;
 	private Window subwindow;
-
-	public HomeView(Backend backend, DocumentBackend docBackend) {
+	
+	public HomeView(Backend backend, DocumentBackend docBackend)
+	{
 		this.mBackend = backend;
 		this.dBackend = docBackend;
 		setSizeFull();
@@ -118,8 +109,10 @@ public class HomeView extends VerticalLayout implements View {
 		addDocBtn.setDescription("Add a new document");
 		addDocBtn.setSizeUndefined();
 		
-		addDocBtn.addClickListener(new Button.ClickListener() {
-			public void buttonClick(ClickEvent event) {
+		addDocBtn.addClickListener(new Button.ClickListener()
+		{
+			public void buttonClick(ClickEvent event)
+			{
 				getUI().getNavigator().navigateTo("document");
 			}
 		});
@@ -154,18 +147,22 @@ public class HomeView extends VerticalLayout implements View {
 	}
 	
 	// document list
-	Panel createPanel() {
+	private Panel createPanel()
+	{
 		Panel panel = new Panel();
 		CssLayout layout = new CssLayout();
 		layout.setSizeFull();
 		
-		for (Document doc : mBackend.getUsersDocs())  {
+		for (Document doc : mBackend.getUsersDocs())
+		{
 			Button button = new Button(doc.getDocName());
 			button.setData(doc);
 			button.setIcon(FontAwesome.FOLDER);
 			button.addStyleName(BaseTheme.BUTTON_LINK);
-			button.addClickListener(new Button.ClickListener() {
-				public void buttonClick(ClickEvent event) {
+			button.addClickListener(new Button.ClickListener()
+			{
+				public void buttonClick(ClickEvent event)
+				{
 					Document doc = (Document) event.getButton().getData();
 					if (doubleClicked && bTemp.equals(event.getButton()) && System.currentTimeMillis()-clickTimer < 500) {
 						getUI().getNavigator().navigateTo("document/" + doc.getDocId());
