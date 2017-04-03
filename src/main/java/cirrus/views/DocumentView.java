@@ -9,26 +9,21 @@ import org.vaadin.spring.sidebar.annotation.SideBarItem;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 
 import cirrus.Sections;
+import cirrus.Descriptors.DocDescriptor;
 import cirrus.backend.DocumentBackend;
 import cirrus.models.Document;
+import cirrus.templates.Descriptor;
 
 /**
  * View for view documents.
@@ -38,75 +33,95 @@ import cirrus.models.Document;
 @SideBarItem(sectionId = Sections.VIEWS, caption = "Document View")
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
 public class DocumentView extends VerticalLayout implements View {
-
+	private final 	Descriptor	mDocView;
+	
 	private final DocumentBackend mBackend;
-
-	private final MenuBar barmenu;
-	private final TextField docName;
-	private final Window subWindow;
+	private TextField docName;
 	private TextArea docBody;
 	Integer docId;
 
 	@Autowired
 	public DocumentView(DocumentBackend backend)
 	{
-		subWindow = createWindow();
 		this.mBackend = backend;
+		this.setSizeFull();
+		this.setMargin(true);
+		
+		mDocView = new DocDescriptor();
 		setSizeFull();
 		setMargin(true);
-
-		// MenuBar Filew, Edit, Views, Tools?
-		barmenu = new MenuBar();
-		addComponent(barmenu);
 		
 		
-		// TOP-LEVEL MENUITEM 1
-		MenuItem menuFile = barmenu.addItem("File", null, null);
-		// SUBMENU
-		MenuItem _menuImport = menuFile.addItem("Import", null, null);
-		// SUBMENU
-		MenuItem menuExport = menuFile.addItem("Export", null, null);
-
-		
-		
-		// TOP-LEVEL MENUITEM 2
-		MenuItem menuEdit = barmenu.addItem("Edit", null, null);
-
-		// TOP-LEVEL MENUITEM 3
-		
-		MenuItem menuView = barmenu.addItem("View", null, null);
-		
-		// TOP-LEVEL MENUITEM 4
-		MenuItem servs = barmenu.addItem("Options", null, null);
-		// Define a common menu command for all the menu items.
-		MenuBar.Command mycommand = new MenuBar.Command() {
-		    public void menuSelected(MenuItem selectedItem) {
-		    	MySub sub = new MySub(selectedItem.getText());
-	    	    // Add it to the root component
-	    	    UI.getCurrent().addWindow(sub);
-		    }
-		};
-		MenuItem pref = servs.addItem("Preferences", null, mycommand);
-		
-		// Document Name Text Field
-		docName = new TextField();
-		docName.setSizeUndefined();
-		addComponent(docName);
-
-		
-		// Toolbar
-		HorizontalLayout toolbar = new HorizontalLayout();
-		toolbar.setSizeUndefined();
-
-		// Save Button
-		Button save = new Button();
-		save.setIcon(FontAwesome.SAVE);
-		save.setSizeFull();
-		save.addClickListener(new Button.ClickListener()
+		for( Component component : mDocView.getLoadOrder() )
+		{
+			if( component instanceof TextField )
+			{
+				TextField text = (TextField) component;
+				if( text.getId().equals( "DocumentNameField" ) )
+				{
+					docName = text;
+				}
+			}
+			else if( component instanceof HorizontalLayout )
+			{
+				HorizontalLayout layout = (HorizontalLayout) component;
+				this.setButtonListeners(layout);
+			}
+			
+			this.addComponent( component );
+			
+			if( component instanceof Panel )
+			{
+				Panel panel = (Panel) component;
+				this.setExpandRatio(panel, 1.0f);
+				docBody = (TextArea) panel.getContent();
+				panel.getComponentCount();
+			}
+		}
+	}
+	
+	private void setButtonListeners( HorizontalLayout layout )
+	{
+		for( int i = 0; i < layout.getComponentCount(); ++i )
+		{
+			Component component = layout.getComponent( i );
+			if( component instanceof Button )
+			{
+				Button button = (Button) component;
+				if( button.getId().equals("DocumentSave") )
+				{
+					button.addClickListener( this.createSaveAction() );
+				}
+				else if( button.getId().equals("DocumentTrash") )
+				{
+					button.addClickListener( this.createTrashAction() );
+				}
+			}
+		}
+	}
+	
+	private Button.ClickListener createTrashAction()
+	{
+		Button.ClickListener listener = new Button.ClickListener()
 		{
 			public void buttonClick(ClickEvent event)
 			{
-				Document doc;
+				if (docId != null)
+					mBackend.deleteDocument(docId);
+				getUI().getNavigator().navigateTo("");
+			}
+		};
+		
+		return listener;
+	}
+	
+	private Button.ClickListener createSaveAction()
+	{
+		Button.ClickListener listener = new Button.ClickListener()
+		{
+			public void buttonClick(ClickEvent event)
+			{
+				Document doc = mBackend.getDocument(docId);
 				if (docId == null)
 				{
 					doc = new Document(mBackend.getCurrentUser(), docName.getValue(), docBody.getValue());
@@ -120,60 +135,18 @@ public class DocumentView extends VerticalLayout implements View {
 				}
 				mBackend.saveDocument(doc);
 			}
-		});
-		toolbar.addComponent(save);
-
-		Button trash = new Button();
-		trash.setIcon(FontAwesome.TRASH);
-		trash.setSizeFull();
-		trash.addClickListener(new Button.ClickListener()
-		{
-			public void buttonClick(ClickEvent event)
-			{
-				if (docId != null)
-					mBackend.deleteDocument(docId);
-				getUI().getNavigator().navigateTo("");
-			}
-		});
-		toolbar.addComponent(trash);
-
-		addComponent(toolbar);
-
-		Panel panel = createPanel();
-		addComponent(panel);
-		this.setExpandRatio(panel, 1.0f);
+		};
+		
+		return listener;
 	}
 	
-	private Window createWindow()
-	{
-		Window window = new Window("Preferences");
-        window.setWidth(300.0f, Unit.PIXELS);
-        final FormLayout content = new FormLayout();
-        content.setMargin(true);
-        window.setContent(content);
-        
-        return window;
-	}
-
-	private Panel createPanel()
-	{
-		Panel panel = new Panel();
-		docBody = new TextArea();
-		docBody.setWordwrap(false);
-		docBody.setSizeFull();
-
-		panel.setSizeFull();
-		panel.setContent(docBody);
-		return panel;
-	}
-
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
 		if (event.getParameters() != null)
 		{
 			try {
-				docId = Integer.parseInt(event.getParameters());
+				docId = Integer.parseInt( event.getParameters() );
 				Document doc = mBackend.getDocument(docId);
 				docName.setValue(doc.getDocName());
 				docBody.setValue(doc.getDocBody());
@@ -181,25 +154,5 @@ public class DocumentView extends VerticalLayout implements View {
 				return;
 			}
 		}
-	}
-	
-	
-	
-	private class MySub extends Window {
-	    public MySub(final String windowName) {
-	        super(windowName); // Set window caption
-	        
-	        mName = windowName;
-	        center();
-
-	        this.setWidth(640, Unit.PIXELS);
-	        this.setHeight(480, Unit.PIXELS);
-	        // Disable the close button
-	        setClosable(true);
-
-	        setContent(new Button("Close "+mName+" Test", event -> close()));
-	    }
-	    
-	    private final String mName;
 	}
 }
