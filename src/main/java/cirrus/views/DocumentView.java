@@ -14,6 +14,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -42,6 +43,7 @@ public class DocumentView extends VerticalLayout implements View {
 	private final DocumentBackend mBackend;
 
 	private final MenuBar barmenu;
+	private final MenuBar buildMenu;
 	private final TextField docName;
 	private final Window subWindow;
 	private TextArea docBody;
@@ -68,7 +70,6 @@ public class DocumentView extends VerticalLayout implements View {
 		MenuItem menuExport = menuFile.addItem("Export", null, null);
 
 		
-		
 		// TOP-LEVEL MENUITEM 2
 		MenuItem menuEdit = barmenu.addItem("Edit", null, null);
 
@@ -92,8 +93,7 @@ public class DocumentView extends VerticalLayout implements View {
 		docName = new TextField();
 		docName.setSizeUndefined();
 		addComponent(docName);
-
-		
+				
 		// Toolbar
 		HorizontalLayout toolbar = new HorizontalLayout();
 		toolbar.setSizeUndefined();
@@ -138,17 +138,29 @@ public class DocumentView extends VerticalLayout implements View {
 		toolbar.addComponent(trash);
 
 		addComponent(toolbar);
+		
+		// IDE Menubar
+		buildMenu = new MenuBar();
+		addComponent(buildMenu);
+		
+		MenuItem build = buildMenu.addItem("Build", FontAwesome.CHECK_CIRCLE, null);		
+		MenuItem run = buildMenu.addItem("Run", FontAwesome.PLAY_CIRCLE_O, null);
+		MenuItem stop = buildMenu.addItem("Stop", FontAwesome.STOP_CIRCLE_O, null);		
 
+		
+		// Document body
 		Panel panel = createPanel();
 		addComponent(panel);
 		this.setExpandRatio(panel, 1.0f);
+
 	}
 	
 	private Window createWindow()
 	{
 		Window window = new Window("Preferences");
         window.setWidth(300.0f, Unit.PIXELS);
-        final FormLayout content = new FormLayout();
+        FormLayout content = new FormLayout();
+		content.addComponent(new CheckBox("Show line numbers"));
         content.setMargin(true);
         window.setContent(content);
         
@@ -192,12 +204,21 @@ public class DocumentView extends VerticalLayout implements View {
 	        mName = windowName;
 	        center();
 
-	        this.setWidth(640, Unit.PIXELS);
-	        this.setHeight(480, Unit.PIXELS);
+	        this.setWidth(400, Unit.PIXELS);
+	        this.setHeight(300, Unit.PIXELS);
+	        
+	        VerticalLayout content = new VerticalLayout();
+	        content.addComponent(new CheckBox("Show Line Numbers"));
+	        
+	        HorizontalLayout buttons = new HorizontalLayout();
+	        buttons.addComponent(new Button("Save"));
+	        buttons.addComponent(new Button("Close "+mName+" Test", event -> close()));
+	        
 	        // Disable the close button
-	        setClosable(true);
-
-	        setContent(new Button("Close "+mName+" Test", event -> close()));
+	        setClosable(false);
+	        setResizable(false);
+	        content.addComponent(buttons);
+	        setContent(content);
 	    }
 	    
 	    private final String mName;
