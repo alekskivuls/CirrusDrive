@@ -9,27 +9,26 @@ import org.vaadin.spring.sidebar.annotation.SideBarItem;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.ThemeResource;
-import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+<<<<<<< HEAD
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.FormLayout;
+=======
+import com.vaadin.ui.Component;
+>>>>>>> a22352aee29827d3ecc813109c3ccc16b7856d81
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
 
 import cirrus.Sections;
+import cirrus.Descriptors.DocDescriptor;
 import cirrus.backend.DocumentBackend;
 import cirrus.models.Document;
+import cirrus.templates.Descriptor;
 
 /**
  * View for view documents.
@@ -39,29 +38,34 @@ import cirrus.models.Document;
 @SideBarItem(sectionId = Sections.VIEWS, caption = "Document View")
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
 public class DocumentView extends VerticalLayout implements View {
-
+	private final 	Descriptor	mDocView;
+	
 	private final DocumentBackend mBackend;
+<<<<<<< HEAD
 
 	private final MenuBar barmenu;
 	private final MenuBar buildMenu;
 	private final TextField docName;
 	private final Window subWindow;
+=======
+	private TextField docName;
+>>>>>>> a22352aee29827d3ecc813109c3ccc16b7856d81
 	private TextArea docBody;
 	Integer docId;
 
 	@Autowired
 	public DocumentView(DocumentBackend backend)
 	{
-		subWindow = createWindow();
 		this.mBackend = backend;
+		this.setSizeFull();
+		this.setMargin(true);
+		
+		mDocView = new DocDescriptor();
 		setSizeFull();
 		setMargin(true);
-
-		// MenuBar Filew, Edit, Views, Tools?
-		barmenu = new MenuBar();
-		addComponent(barmenu);
 		
 		
+<<<<<<< HEAD
 		// TOP-LEVEL MENUITEM 1
 		MenuItem menuFile = barmenu.addItem("File", null, null);
 		// SUBMENU
@@ -86,9 +90,69 @@ public class DocumentView extends VerticalLayout implements View {
 	    	    // Add it to the root component
 	    	    UI.getCurrent().addWindow(sub);
 		    }
+=======
+		for( Component component : mDocView.getLoadOrder() )
+		{
+			if( component instanceof TextField )
+			{
+				TextField text = (TextField) component;
+				if( text.getId().equals( "DocumentNameField" ) )
+				{
+					docName = text;
+				}
+			}
+			else if( component instanceof HorizontalLayout )
+			{
+				HorizontalLayout layout = (HorizontalLayout) component;
+				this.setButtonListeners(layout);
+			}
+			
+			this.addComponent( component );
+			
+			if( component instanceof Panel )
+			{
+				Panel panel = (Panel) component;
+				this.setExpandRatio(panel, 1.0f);
+				docBody = (TextArea) panel.getContent();
+				panel.getComponentCount();
+			}
+		}
+	}
+	
+	private void setButtonListeners( HorizontalLayout layout )
+	{
+		for( int i = 0; i < layout.getComponentCount(); ++i )
+		{
+			Component component = layout.getComponent( i );
+			if( component instanceof Button )
+			{
+				Button button = (Button) component;
+				if( button.getId().equals("DocumentSave") )
+				{
+					button.addClickListener( this.createSaveAction() );
+				}
+				else if( button.getId().equals("DocumentTrash") )
+				{
+					button.addClickListener( this.createTrashAction() );
+				}
+			}
+		}
+	}
+	
+	private Button.ClickListener createTrashAction()
+	{
+		Button.ClickListener listener = new Button.ClickListener()
+		{
+			public void buttonClick(ClickEvent event)
+			{
+				if (docId != null)
+					mBackend.deleteDocument(docId);
+				getUI().getNavigator().navigateTo("");
+			}
+>>>>>>> a22352aee29827d3ecc813109c3ccc16b7856d81
 		};
-		MenuItem pref = servs.addItem("Preferences", null, mycommand);
 		
+<<<<<<< HEAD
 		// Document Name Text Field
 		docName = new TextField();
 		docName.setSizeUndefined();
@@ -103,10 +167,18 @@ public class DocumentView extends VerticalLayout implements View {
 		save.setIcon(FontAwesome.SAVE);
 		save.setSizeFull();
 		save.addClickListener(new Button.ClickListener()
+=======
+		return listener;
+	}
+	
+	private Button.ClickListener createSaveAction()
+	{
+		Button.ClickListener listener = new Button.ClickListener()
+>>>>>>> a22352aee29827d3ecc813109c3ccc16b7856d81
 		{
 			public void buttonClick(ClickEvent event)
 			{
-				Document doc;
+				Document doc = mBackend.getDocument(docId);
 				if (docId == null)
 				{
 					doc = new Document(mBackend.getCurrentUser(), docName.getValue(), docBody.getValue());
@@ -120,6 +192,7 @@ public class DocumentView extends VerticalLayout implements View {
 				}
 				mBackend.saveDocument(doc);
 			}
+<<<<<<< HEAD
 		});
 		toolbar.addComponent(save);
 
@@ -179,13 +252,20 @@ public class DocumentView extends VerticalLayout implements View {
 		return panel;
 	}
 
+=======
+		};
+		
+		return listener;
+	}
+	
+>>>>>>> a22352aee29827d3ecc813109c3ccc16b7856d81
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
 		if (event.getParameters() != null)
 		{
 			try {
-				docId = Integer.parseInt(event.getParameters());
+				docId = Integer.parseInt( event.getParameters() );
 				Document doc = mBackend.getDocument(docId);
 				docName.setValue(doc.getDocName());
 				docBody.setValue(doc.getDocBody());
@@ -194,6 +274,7 @@ public class DocumentView extends VerticalLayout implements View {
 			}
 		}
 	}
+<<<<<<< HEAD
 	
 	
 	
@@ -224,3 +305,6 @@ public class DocumentView extends VerticalLayout implements View {
 	    private final String mName;
 	}
 }
+=======
+}
+>>>>>>> a22352aee29827d3ecc813109c3ccc16b7856d81

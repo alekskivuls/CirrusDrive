@@ -1,29 +1,20 @@
 package cirrus.views;
 
-import java.sql.Date;
-
 import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
 
 import com.vaadin.annotations.Theme;
-import com.vaadin.data.util.MethodProperty;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Page;
-import com.vaadin.server.Sizeable;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -33,6 +24,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 import cirrus.Sections;
 import cirrus.backend.Backend;
+import cirrus.backend.DocumentBackend;
 import cirrus.models.Document;
 
 /**
@@ -45,14 +37,17 @@ import cirrus.models.Document;
 @FontAwesomeIcon(FontAwesome.HOME)
 public class HomeView extends VerticalLayout implements View {
 	final Backend mBackend;
+	final DocumentBackend dBackend;
 	private boolean doubleClicked = false;
 	private Button bTemp = null;
 	private Panel sidePanel;
 	private long clickTimer;
-
-	public HomeView(Backend backend)
+	private Window subwindow;
+	
+	public HomeView(Backend backend, DocumentBackend docBackend)
 	{
 		this.mBackend = backend;
+		this.dBackend = docBackend;
 		setSizeFull();
 		setMargin(true);
 
@@ -64,6 +59,52 @@ public class HomeView extends VerticalLayout implements View {
 		titleBar.addComponent(header);
 		titleBar.setExpandRatio(header, 1.0f);
 		
+		// Subwindow -----------------------------------------------
+		subwindow = new Window("New Document");
+		subwindow.setModal(true);
+		subwindow.setResizable(false);
+
+        // Window setup
+        VerticalLayout subContent = new VerticalLayout();
+        subContent.setMargin(true);
+        subContent.setSpacing(true);
+        subwindow.setContent(subContent);
+        
+        // Text fields from user
+        TextField docNameField = new TextField("Name:");
+        TextField docDescripField = new TextField("Description:");
+
+        // Button to finish subcontent and go to new document page
+        Button finishDocBtn = new Button("Create");
+		finishDocBtn.addClickListener(event -> {
+			Document doc = new Document(docBackend.getCurrentUser(), docNameField.getValue());
+			doc.setDocDescription((String)docDescripField.getValue());
+			docBackend.saveDocument(doc);
+			subwindow.close();
+			
+			getUI().getNavigator().navigateTo("document/" + doc.getDocId());
+			
+		});
+        
+		// Add content to subwindow
+        subContent.addComponent(docNameField);
+        subContent.addComponent(docDescripField);
+        subContent.addComponent(finishDocBtn);
+        subContent.setComponentAlignment(finishDocBtn, Alignment.BOTTOM_RIGHT);
+        
+        // Button to open subwindow
+        Button addDocBtn = new Button(FontAwesome.PLUS);
+		addDocBtn.addClickListener(event -> {
+			getUI().getCurrent().addWindow(subwindow);
+		});
+		
+		titleBar.addComponent(addDocBtn);
+		titleBar.setComponentAlignment(addDocBtn, Alignment.TOP_RIGHT);
+		
+		addComponent(titleBar);
+		
+		/*
+		// Old Button -------------------------------------------------
 		Button addDocBtn = new Button(FontAwesome.PLUS);
 		addDocBtn.setDescription("Add a new document");
 		addDocBtn.setSizeUndefined();
@@ -80,8 +121,10 @@ public class HomeView extends VerticalLayout implements View {
 		titleBar.setComponentAlignment(addDocBtn, Alignment.TOP_RIGHT);
 		
 		addComponent(titleBar);
+		//-------------------------------------------------------------
+		*/
 		
-		// Main layout to hold the panel
+		// Main layout to hold the panel -----------------------------
         HorizontalLayout mainLayout = new HorizontalLayout();
         mainLayout.setSizeFull();
         mainLayout.setSpacing(true);
@@ -95,18 +138,12 @@ public class HomeView extends VerticalLayout implements View {
         sidePanel = new Panel("Details");
         mainLayout.addComponent(sidePanel);
         sidePanel.setHeight("100%");
-        sidePanel.setWidth("200px");
+        sidePanel.setWidth("250px");
         sidePanel.setVisible(false);
 		
         //Add layout
 		addComponent(mainLayout);
 		this.setExpandRatio(mainLayout, 1.0f);
-		
-		/*
-		Panel panel = createPanel();
-		addComponent(panel);
-		this.setExpandRatio(panel, 1.0f);
-		*/
 	}
 	
 	// document list
@@ -135,7 +172,6 @@ public class HomeView extends VerticalLayout implements View {
 						clickTimer = System.currentTimeMillis();
 						bTemp = event.getButton();
 						doubleClicked = true;
-						
 						sidePanel.setVisible(true);
 						sidePanel.setContent(genSidePanelContent(doc));
 					}
@@ -154,10 +190,11 @@ public class HomeView extends VerticalLayout implements View {
 		FormLayout content = new FormLayout();
 		
 		content.addStyleName("mypanelcontent");
-		content.addComponent(new Label("PLACEHOLDER"));
-		content.addComponent(new Label("Owner: " + doc.getDocOwner().getUserName()));
-		content.addComponent(new Label("Name: " + doc.getDocName()));
-		content.setSizeUndefined(); // Shrink to fit
+		content.addComponent(new Label("<b>Owner:</b> " + doc.getDocOwner().getUserName(), com.vaadin.shared.ui.label.ContentMode.HTML));
+		content.addComponent(new Label("<b>Name:</b> " + doc.getDocName(), com.vaadin.shared.ui.label.ContentMode.HTML));
+		content.addComponent(new Label("<b>Description:</b> " + doc.getDocDescription(), com.vaadin.shared.ui.label.ContentMode.HTML));
+		content.addComponent(new Label("<b>Date:</b> " + doc.getDate(), com.vaadin.shared.ui.label.ContentMode.HTML));
+		content.setSizeFull();
 		
 		return content;
 	}

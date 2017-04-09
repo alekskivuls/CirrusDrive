@@ -1,5 +1,8 @@
 package cirrus.models;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +17,8 @@ public class Document {
 	private int docId;
 	private String docName;
 	private String docBody;
+	private String docDescription;
+	private String date;
 	
 	@ManyToOne
 	private User docOwner;
@@ -22,12 +27,14 @@ public class Document {
 	}
 	
 	public Document(User ownerUserName, String docName) {
+		setDate();
 		this.docName = docName;
 		this.docOwner = ownerUserName;
 		this.docBody = "";
 	}
 	
 	public Document(User ownerUserName, String docName, String docBody) {
+		setDate();
 		this.docName = docName;
 		this.docOwner = ownerUserName;
 		this.docBody = docBody;
@@ -64,14 +71,26 @@ public class Document {
 	public void setDocOwner(User docOwner) {
 		this.docOwner = docOwner;
 	}
+	
+	public void setDocDescription(String docDescription) {
+		this.docDescription = docDescription;
+	}
 
+	public String getDocDescription() {
+		return docDescription;
+	}
+	
+	public void setDate() {
+		this.date = new SimpleDateFormat("MM/dd/yyyy HH:mm").format(Calendar.getInstance().getTime());
+	}
+	
+	public String getDate() {
+		return date;
+	}
+	
 	@Override
 	public String toString() {
 		return "Document [docId=" + docId + ", docName=" + docName + ", docBody=" + docBody + ", docOwner=" + docOwner
 				+ "]";
 	}
-
-
-
-
 }

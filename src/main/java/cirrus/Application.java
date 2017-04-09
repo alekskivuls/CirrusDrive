@@ -103,12 +103,15 @@ public class Application {
 			// save a couple docs
 			Document doc1 = new Document(admin, "Doc1");
 			doc1.setDocBody("body");
+			doc1.setDocDescription("Contains all relevant information to the cirrus project.");
 			docRepo.save(doc1);
 			Document doc2 = new Document(regular, "Doc2");
 			docRepo.save(doc2);
 			Document doc3 = new Document(admin, "Doc3");
+			doc3.setDocDescription("The notes from a meeting that took place last wednesday.");
 			docRepo.save(doc3);
 			Document doc4 = new Document(admin, "Doc4");
+			doc4.setDocDescription("In class lecture notes for CECS 444 last week for chapter 5.");
 			docRepo.save(doc4);
 			
 			System.out.println("Documents found with findByDocOwner(admin): ");
