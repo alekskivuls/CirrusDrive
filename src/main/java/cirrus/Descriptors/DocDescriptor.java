@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.MenuBar;
@@ -12,6 +13,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import cirrus.templates.Descriptor;
@@ -36,6 +38,7 @@ public class DocDescriptor extends Descriptor
 		this.mLoadOrder.add( this.initMenubar() );
 		this.mLoadOrder.add( this.initDocNameField() );
 		this.mLoadOrder.add( this.initToolbar() );
+		this.mLoadOrder.add( this.initBuildMenu());
 		this.mLoadOrder.add( this.initPanel() );
 	}
 	
@@ -110,6 +113,14 @@ public class DocDescriptor extends Descriptor
 		return docName;
 	}
 	
+	private MenuBar initBuildMenu() {
+		MenuBar buildMenu = new MenuBar();
+		MenuItem build = buildMenu.addItem("Build", FontAwesome.CHECK_CIRCLE, null);		
+		MenuItem run = buildMenu.addItem("Run", FontAwesome.PLAY_CIRCLE_O, null);
+		MenuItem stop = buildMenu.addItem("Stop", FontAwesome.STOP_CIRCLE_O, null);		
+		return buildMenu;
+	}
+	
 	private Panel initPanel()
 	{
 		Panel panel = new Panel();
@@ -129,12 +140,22 @@ public class DocDescriptor extends Descriptor
 	        mName = windowName;
 	        center();
 
-	        this.setWidth(640, Unit.PIXELS);
-	        this.setHeight(480, Unit.PIXELS);
+	        this.setWidth(400, Unit.PIXELS);
+	        this.setHeight(300, Unit.PIXELS);
+	        
+	        VerticalLayout content = new VerticalLayout();
+	        content.addComponent(new CheckBox("Show Line Numbers"));
+	        
+	        HorizontalLayout buttons = new HorizontalLayout();
+	        buttons.addComponent(new Button("Save"));
+	        buttons.addComponent(new Button("Close "+mName+" Test", event -> close()));
+	        
 	        // Disable the close button
-	        this.setClosable(true);
+	        this.setClosable(false);
+	        this.setResizable(false);
 
-	        this.setContent(new Button("Close "+mName+" Test", event -> close()));
+	        content.addComponent(buttons);
+	        this.setContent(content);
 	    }
 	    
 	    private final String mName;

@@ -12,12 +12,7 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-<<<<<<< HEAD
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.FormLayout;
-=======
 import com.vaadin.ui.Component;
->>>>>>> a22352aee29827d3ecc813109c3ccc16b7856d81
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
@@ -41,15 +36,7 @@ public class DocumentView extends VerticalLayout implements View {
 	private final 	Descriptor	mDocView;
 	
 	private final DocumentBackend mBackend;
-<<<<<<< HEAD
-
-	private final MenuBar barmenu;
-	private final MenuBar buildMenu;
-	private final TextField docName;
-	private final Window subWindow;
-=======
 	private TextField docName;
->>>>>>> a22352aee29827d3ecc813109c3ccc16b7856d81
 	private TextArea docBody;
 	Integer docId;
 
@@ -65,32 +52,6 @@ public class DocumentView extends VerticalLayout implements View {
 		setMargin(true);
 		
 		
-<<<<<<< HEAD
-		// TOP-LEVEL MENUITEM 1
-		MenuItem menuFile = barmenu.addItem("File", null, null);
-		// SUBMENU
-		MenuItem _menuImport = menuFile.addItem("Import", null, null);
-		// SUBMENU
-		MenuItem menuExport = menuFile.addItem("Export", null, null);
-
-		
-		// TOP-LEVEL MENUITEM 2
-		MenuItem menuEdit = barmenu.addItem("Edit", null, null);
-
-		// TOP-LEVEL MENUITEM 3
-		
-		MenuItem menuView = barmenu.addItem("View", null, null);
-		
-		// TOP-LEVEL MENUITEM 4
-		MenuItem servs = barmenu.addItem("Options", null, null);
-		// Define a common menu command for all the menu items.
-		MenuBar.Command mycommand = new MenuBar.Command() {
-		    public void menuSelected(MenuItem selectedItem) {
-		    	MySub sub = new MySub(selectedItem.getText());
-	    	    // Add it to the root component
-	    	    UI.getCurrent().addWindow(sub);
-		    }
-=======
 		for( Component component : mDocView.getLoadOrder() )
 		{
 			if( component instanceof TextField )
@@ -149,32 +110,14 @@ public class DocumentView extends VerticalLayout implements View {
 					mBackend.deleteDocument(docId);
 				getUI().getNavigator().navigateTo("");
 			}
->>>>>>> a22352aee29827d3ecc813109c3ccc16b7856d81
 		};
 		
-<<<<<<< HEAD
-		// Document Name Text Field
-		docName = new TextField();
-		docName.setSizeUndefined();
-		addComponent(docName);
-				
-		// Toolbar
-		HorizontalLayout toolbar = new HorizontalLayout();
-		toolbar.setSizeUndefined();
-
-		// Save Button
-		Button save = new Button();
-		save.setIcon(FontAwesome.SAVE);
-		save.setSizeFull();
-		save.addClickListener(new Button.ClickListener()
-=======
 		return listener;
 	}
 	
 	private Button.ClickListener createSaveAction()
 	{
 		Button.ClickListener listener = new Button.ClickListener()
->>>>>>> a22352aee29827d3ecc813109c3ccc16b7856d81
 		{
 			public void buttonClick(ClickEvent event)
 			{
@@ -192,73 +135,11 @@ public class DocumentView extends VerticalLayout implements View {
 				}
 				mBackend.saveDocument(doc);
 			}
-<<<<<<< HEAD
-		});
-		toolbar.addComponent(save);
-
-		Button trash = new Button();
-		trash.setIcon(FontAwesome.TRASH);
-		trash.setSizeFull();
-		trash.addClickListener(new Button.ClickListener()
-		{
-			public void buttonClick(ClickEvent event)
-			{
-				if (docId != null)
-					mBackend.deleteDocument(docId);
-				getUI().getNavigator().navigateTo("");
-			}
-		});
-		toolbar.addComponent(trash);
-
-		addComponent(toolbar);
-		
-		// IDE Menubar
-		buildMenu = new MenuBar();
-		addComponent(buildMenu);
-		
-		MenuItem build = buildMenu.addItem("Build", FontAwesome.CHECK_CIRCLE, null);		
-		MenuItem run = buildMenu.addItem("Run", FontAwesome.PLAY_CIRCLE_O, null);
-		MenuItem stop = buildMenu.addItem("Stop", FontAwesome.STOP_CIRCLE_O, null);		
-
-		
-		// Document body
-		Panel panel = createPanel();
-		addComponent(panel);
-		this.setExpandRatio(panel, 1.0f);
-
-	}
-	
-	private Window createWindow()
-	{
-		Window window = new Window("Preferences");
-        window.setWidth(300.0f, Unit.PIXELS);
-        FormLayout content = new FormLayout();
-		content.addComponent(new CheckBox("Show line numbers"));
-        content.setMargin(true);
-        window.setContent(content);
-        
-        return window;
-	}
-
-	private Panel createPanel()
-	{
-		Panel panel = new Panel();
-		docBody = new TextArea();
-		docBody.setWordwrap(false);
-		docBody.setSizeFull();
-
-		panel.setSizeFull();
-		panel.setContent(docBody);
-		return panel;
-	}
-
-=======
 		};
 		
 		return listener;
 	}
 	
->>>>>>> a22352aee29827d3ecc813109c3ccc16b7856d81
 	@Override
 	public void enter(ViewChangeEvent event)
 	{
@@ -274,37 +155,5 @@ public class DocumentView extends VerticalLayout implements View {
 			}
 		}
 	}
-<<<<<<< HEAD
-	
-	
-	
-	private class MySub extends Window {
-	    public MySub(final String windowName) {
-	        super(windowName); // Set window caption
-	        
-	        mName = windowName;
-	        center();
+}
 
-	        this.setWidth(400, Unit.PIXELS);
-	        this.setHeight(300, Unit.PIXELS);
-	        
-	        VerticalLayout content = new VerticalLayout();
-	        content.addComponent(new CheckBox("Show Line Numbers"));
-	        
-	        HorizontalLayout buttons = new HorizontalLayout();
-	        buttons.addComponent(new Button("Save"));
-	        buttons.addComponent(new Button("Close "+mName+" Test", event -> close()));
-	        
-	        // Disable the close button
-	        setClosable(false);
-	        setResizable(false);
-	        content.addComponent(buttons);
-	        setContent(content);
-	    }
-	    
-	    private final String mName;
-	}
-}
-=======
-}
->>>>>>> a22352aee29827d3ecc813109c3ccc16b7856d81
