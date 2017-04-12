@@ -3,6 +3,7 @@ package cirrus.models;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +17,7 @@ public class Document {
 	@GeneratedValue( strategy = GenerationType.AUTO)
 	private int docId;
 	private String docName;
+	@Column(length=1000000)
 	private String docBody;
 	private String docDescription;
 	private String date;
