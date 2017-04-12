@@ -20,8 +20,8 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import cirrus.Sections;
-import cirrus.Descriptors.DocDescriptor;
 import cirrus.backend.DocumentBackend;
+import cirrus.descriptors.DocDescriptor;
 import cirrus.models.Document;
 import cirrus.templates.Descriptor;
 

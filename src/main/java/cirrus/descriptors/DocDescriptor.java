@@ -1,4 +1,4 @@
-package cirrus.Descriptors;
+package cirrus.descriptors;
 
 import java.util.LinkedList;
 
