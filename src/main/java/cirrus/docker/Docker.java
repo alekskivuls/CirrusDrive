@@ -14,6 +14,7 @@ import com.spotify.docker.client.messages.ContainerCreation;
 import com.spotify.docker.client.messages.ContainerInfo;
 import com.spotify.docker.client.messages.HostConfig;
 import com.spotify.docker.client.messages.HostConfig.Bind;
+import com.spotify.docker.client.messages.HostConfig.Builder;
 
 public class Docker {
 	DockerClient docker;
@@ -46,7 +47,7 @@ public class Docker {
 		}
 	}
 
-	public String createContainer(String mountDir, String... args)
+	private String createContainer(String mountDir, String... args)
 			throws DockerCertificateException, DockerException, InterruptedException {
 		List<String> list = new ArrayList<>();
 		for (String arg : args) {
@@ -55,12 +56,15 @@ public class Docker {
 		return createContainer(mountDir, list);
 	}
 
-	public String createContainer(String mountDir, List<String> commands)
+	private String createContainer(String mountDir, List<String> commands)
 			throws DockerCertificateException, DockerException, InterruptedException {
+		Builder configBuilder = HostConfig.builder();
+		if (mountDir != null) {
+			String srcPath = Docker.class.getResource(mountDir).getPath();
+			configBuilder.appendBinds(Bind.from(srcPath).to("/src").readOnly(true).build());
+		}
+		final HostConfig hostConfig = configBuilder.build();
 
-		String srcPath = Docker.class.getResource(mountDir).getPath();
-		final HostConfig hostConfig = HostConfig.builder()
-				.appendBinds(Bind.from(srcPath).to("/src").readOnly(true).build()).build();
 		String shellScript = "";
 		for (String cmd : commands) {
 			shellScript += cmd + ';';
