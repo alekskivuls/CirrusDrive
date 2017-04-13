@@ -18,32 +18,29 @@ import com.vaadin.ui.Window;
 
 import cirrus.templates.Descriptor;
 
-public class DocDescriptor extends Descriptor
-{
+public class DocDescriptor extends Descriptor {
 	/**
-	 * This constructor is used to define a Layout that utilizes a cirrus drive Database Object.
+	 * This constructor is used to define a Layout that utilizes a cirrus drive
+	 * Database Object.
 	 * 
 	 * @param backendType
 	 * @param backend
 	 */
-	public DocDescriptor()
-	{
+	public DocDescriptor() {
 		mLoadOrder = new LinkedList<Component>();
 		this.init();
 	}
 
 	@Override
-	protected void init()
-	{
-		this.mLoadOrder.add( this.initMenubar() );
-		this.mLoadOrder.add( this.initDocNameField() );
-		this.mLoadOrder.add( this.initToolbar() );
-		this.mLoadOrder.add( this.initBuildMenu());
-		this.mLoadOrder.add( this.initPanel() );
+	protected void init() {
+		this.mLoadOrder.add(this.initMenubar());
+		this.mLoadOrder.add(this.initDocNameField());
+		this.mLoadOrder.add(this.initToolbar());
+		this.mLoadOrder.add(this.initBuildMenu());
+		this.mLoadOrder.add(this.initPanel());
 	}
-	
-	private MenuBar initMenubar()
-	{
+
+	private MenuBar initMenubar() {
 		// MenuBar File, Edit, Views, Tools?
 		MenuBar barmenu = new MenuBar();
 		// TOP-LEVEL MENUITEM 1
@@ -60,69 +57,78 @@ public class DocDescriptor extends Descriptor
 		MenuItem menuOptions = barmenu.addItem("Options", null, null);
 		// Define a common menu command for all the menu items.
 		MenuBar.Command mycommand = new MenuBar.Command() {
-		    public void menuSelected( MenuItem selectedItem ) {
-		    	PrefSubwindow sub = new PrefSubwindow( selectedItem.getText() );
-	    	    // Add it to the root component
-	    	    UI.getCurrent().addWindow( sub );
-		    }
+			public void menuSelected(MenuItem selectedItem) {
+				PrefSubwindow sub = new PrefSubwindow(selectedItem.getText());
+				// Add it to the root component
+				UI.getCurrent().addWindow(sub);
+			}
 		};
-		MenuItem pref = menuOptions.addItem( "Preferences", null, mycommand );
-		
+		MenuItem pref = menuOptions.addItem("Preferences", null, mycommand);
+
 		return barmenu;
 	}
-	
-	
-	private HorizontalLayout initToolbar()
-	{
+
+	private HorizontalLayout initToolbar() {
 		// Toolbar
 		HorizontalLayout toolbar = new HorizontalLayout();
 		toolbar.setSizeUndefined();
 
-		
-		toolbar.addComponent( this.initSaveButton() );
-		toolbar.addComponent( this.initTrashButton() );
-		
+		toolbar.addComponent(this.initSaveButton());
+		toolbar.addComponent(this.initTrashButton());
+		toolbar.addComponent(this.initRunButton());
+
 		return toolbar;
 	}
-	
-	private Button initTrashButton()
-	{
+
+	private Button initTrashButton() {
 		// Save Button
 		Button trash = new Button();
-		trash.setId( "DocumentTrash" );
+		trash.setId("DocumentTrash");
 		trash.setIcon(FontAwesome.TRASH);
 		trash.setSizeFull();
 		return trash;
 	}
-	
-	private Button initSaveButton()
-	{
+
+	private Button initSaveButton() {
 		// Save Button
 		Button save = new Button();
-		save.setId( "DocumentSave" );
+		save.setId("DocumentSave");
 		save.setIcon(FontAwesome.SAVE);
 		save.setSizeFull();
 		return save;
 	}
 	
-	private TextField initDocNameField()
-	{
+	private Button initRunButton() {
+		// Save Button
+		Button run = new Button();
+		run.setId("DocumentRun");
+		run.setIcon(FontAwesome.PLAY_CIRCLE_O);
+		run.setSizeFull();
+		return run;
+	}
+
+	private TextField initDocNameField() {
 		TextField docName = new TextField();
-		docName.setId( "DocumentNameField" );
+		docName.setId("DocumentNameField");
 		docName.setSizeUndefined();
 		return docName;
 	}
-	
+
 	private MenuBar initBuildMenu() {
+		// MenuBar.Command runCode = new MenuBar.Command() {
+		// public void menuSelected(MenuItem selectedItem) {
+		// System.out.println(selectedItem.getText());
+		// }
+		// };
+
 		MenuBar buildMenu = new MenuBar();
-		MenuItem build = buildMenu.addItem("Build", FontAwesome.CHECK_CIRCLE, null);		
+		MenuItem build = buildMenu.addItem("Build", FontAwesome.CHECK_CIRCLE, null);
 		MenuItem run = buildMenu.addItem("Run", FontAwesome.PLAY_CIRCLE_O, null);
-		MenuItem stop = buildMenu.addItem("Stop", FontAwesome.STOP_CIRCLE_O, null);		
+		MenuItem stop = buildMenu.addItem("Stop", FontAwesome.STOP_CIRCLE_O, null);
 		return buildMenu;
 	}
-	
-	private Panel initPanel()
-	{
+
+	private Panel initPanel() {
 		Panel panel = new Panel();
 		TextArea docBody = new TextArea();
 		docBody.setWordwrap(false);
@@ -132,32 +138,32 @@ public class DocDescriptor extends Descriptor
 		panel.setContent(docBody);
 		return panel;
 	}
-	
+
 	private class PrefSubwindow extends Window {
-	    public PrefSubwindow(final String windowName) {
-	        super(windowName); // Set window caption
-	        
-	        mName = windowName;
-	        center();
+		public PrefSubwindow(final String windowName) {
+			super(windowName); // Set window caption
 
-	        this.setWidth(400, Unit.PIXELS);
-	        this.setHeight(300, Unit.PIXELS);
-	        
-	        VerticalLayout content = new VerticalLayout();
-	        content.addComponent(new CheckBox("Show Line Numbers"));
-	        
-	        HorizontalLayout buttons = new HorizontalLayout();
-	        buttons.addComponent(new Button("Save"));
-	        buttons.addComponent(new Button("Close "+mName+" Test", event -> close()));
-	        
-	        // Disable the close button
-	        this.setClosable(false);
-	        this.setResizable(false);
+			mName = windowName;
+			center();
 
-	        content.addComponent(buttons);
-	        this.setContent(content);
-	    }
-	    
-	    private final String mName;
+			this.setWidth(400, Unit.PIXELS);
+			this.setHeight(300, Unit.PIXELS);
+
+			VerticalLayout content = new VerticalLayout();
+			content.addComponent(new CheckBox("Show Line Numbers"));
+
+			HorizontalLayout buttons = new HorizontalLayout();
+			buttons.addComponent(new Button("Save"));
+			buttons.addComponent(new Button("Close " + mName + " Test", event -> close()));
+
+			// Disable the close button
+			this.setClosable(false);
+			this.setResizable(false);
+
+			content.addComponent(buttons);
+			this.setContent(content);
+		}
+
+		private final String mName;
 	}
 }

@@ -33,45 +33,37 @@ import cirrus.templates.Descriptor;
 @SideBarItem(sectionId = Sections.VIEWS, caption = "Document View")
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
 public class DocumentView extends VerticalLayout implements View {
-	private final 	Descriptor	mDocView;
-	
+	private final Descriptor mDocView;
+
 	private final DocumentBackend mBackend;
 	private TextField docName;
 	private TextArea docBody;
 	Integer docId;
 
 	@Autowired
-	public DocumentView(DocumentBackend backend)
-	{
+	public DocumentView(DocumentBackend backend) {
 		this.mBackend = backend;
 		this.setSizeFull();
 		this.setMargin(true);
-		
+
 		mDocView = new DocDescriptor();
 		setSizeFull();
 		setMargin(true);
-		
-		
-		for( Component component : mDocView.getLoadOrder() )
-		{
-			if( component instanceof TextField )
-			{
+
+		for (Component component : mDocView.getLoadOrder()) {
+			if (component instanceof TextField) {
 				TextField text = (TextField) component;
-				if( text.getId().equals( "DocumentNameField" ) )
-				{
+				if (text.getId().equals("DocumentNameField")) {
 					docName = text;
 				}
-			}
-			else if( component instanceof HorizontalLayout )
-			{
+			} else if (component instanceof HorizontalLayout) {
 				HorizontalLayout layout = (HorizontalLayout) component;
 				this.setButtonListeners(layout);
 			}
-			
-			this.addComponent( component );
-			
-			if( component instanceof Panel )
-			{
+
+			this.addComponent(component);
+
+			if (component instanceof Panel) {
 				Panel panel = (Panel) component;
 				this.setExpandRatio(panel, 1.0f);
 				docBody = (TextArea) panel.getContent();
@@ -79,56 +71,43 @@ public class DocumentView extends VerticalLayout implements View {
 			}
 		}
 	}
-	
-	private void setButtonListeners( HorizontalLayout layout )
-	{
-		for( int i = 0; i < layout.getComponentCount(); ++i )
-		{
-			Component component = layout.getComponent( i );
-			if( component instanceof Button )
-			{
+
+	private void setButtonListeners(HorizontalLayout layout) {
+		for (int i = 0; i < layout.getComponentCount(); ++i) {
+			Component component = layout.getComponent(i);
+			if (component instanceof Button) {
 				Button button = (Button) component;
-				if( button.getId().equals("DocumentSave") )
-				{
-					button.addClickListener( this.createSaveAction() );
-				}
-				else if( button.getId().equals("DocumentTrash") )
-				{
-					button.addClickListener( this.createTrashAction() );
+				if (button.getId().equals("DocumentSave")) {
+					button.addClickListener(this.createSaveAction());
+				} else if (button.getId().equals("DocumentTrash")) {
+					button.addClickListener(this.createTrashAction());
+				} else if (button.getId().equals("DocumentRun")) {
+					button.addClickListener(this.createRunAction());
 				}
 			}
 		}
 	}
-	
-	private Button.ClickListener createTrashAction()
-	{
-		Button.ClickListener listener = new Button.ClickListener()
-		{
-			public void buttonClick(ClickEvent event)
-			{
+
+	private Button.ClickListener createTrashAction() {
+		Button.ClickListener listener = new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
 				if (docId != null)
 					mBackend.deleteDocument(docId);
 				getUI().getNavigator().navigateTo("");
 			}
 		};
-		
+
 		return listener;
 	}
-	
-	private Button.ClickListener createSaveAction()
-	{
-		Button.ClickListener listener = new Button.ClickListener()
-		{
-			public void buttonClick(ClickEvent event)
-			{
+
+	private Button.ClickListener createSaveAction() {
+		Button.ClickListener listener = new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
 				Document doc = mBackend.getDocument(docId);
-				if (docId == null)
-				{
+				if (docId == null) {
 					doc = new Document(mBackend.getCurrentUser(), docName.getValue(), docBody.getValue());
 					docId = doc.getDocId();
-				}
-				else
-				{
+				} else {
 					doc = mBackend.getDocument(docId);
 					doc.setDocName(docName.getValue());
 					doc.setDocBody(docBody.getValue());
@@ -136,17 +115,25 @@ public class DocumentView extends VerticalLayout implements View {
 				mBackend.saveDocument(doc);
 			}
 		};
-		
+
 		return listener;
 	}
-	
+
+	private Button.ClickListener createRunAction() {
+		Button.ClickListener listener = new Button.ClickListener() {
+			public void buttonClick(ClickEvent event) {
+				mBackend.runProgram(docBody.getValue());
+			}
+		};
+
+		return listener;
+	}
+
 	@Override
-	public void enter(ViewChangeEvent event)
-	{
-		if (event.getParameters() != null)
-		{
+	public void enter(ViewChangeEvent event) {
+		if (event.getParameters() != null) {
 			try {
-				docId = Integer.parseInt( event.getParameters() );
+				docId = Integer.parseInt(event.getParameters());
 				Document doc = mBackend.getDocument(docId);
 				docName.setValue(doc.getDocName());
 				docBody.setValue(doc.getDocBody());
@@ -156,4 +143,3 @@ public class DocumentView extends VerticalLayout implements View {
 		}
 	}
 }
-

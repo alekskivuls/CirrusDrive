@@ -18,4 +18,7 @@ public interface DocumentBackend {
 	
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	User getCurrentUser();
+
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+	String runProgram(String programSrc);
 }

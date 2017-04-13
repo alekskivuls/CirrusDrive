@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import cirrus.models.Document;
 import cirrus.models.User;
+import cirrus.services.DockerService;
 import cirrus.services.DocumentsService;
 import cirrus.services.UsersService;
 
@@ -17,6 +18,9 @@ public class DocumentBackendBean implements DocumentBackend {
 
 	@Autowired
 	UsersService userService;
+	
+	@Autowired
+	DockerService dockerService;
 	
 	@Override
 	public void saveDocument(Document doc) {
@@ -36,6 +40,12 @@ public class DocumentBackendBean implements DocumentBackend {
 	@Override
 	public void deleteDocument(int docId) {
 		documentService.deleteDocument(docId);
+	}
+	
+	@Override
+	public String runProgram(String programSrc) {
+		System.out.println(dockerService.runProgram(programSrc));
+		return null;
 	}
 	
 }
