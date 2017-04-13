@@ -20,7 +20,8 @@ public class Document {
 	@Column(length=1000000)
 	private String docBody;
 	private String docDescription;
-	private String date;
+	private String createDate;
+	private String modifyDate;
 	
 	@ManyToOne
 	private User docOwner;
@@ -29,14 +30,14 @@ public class Document {
 	}
 	
 	public Document(User ownerUserName, String docName) {
-		setDate();
+		setCreateDate();
 		this.docName = docName;
 		this.docOwner = ownerUserName;
 		this.docBody = "";
 	}
 	
 	public Document(User ownerUserName, String docName, String docBody) {
-		setDate();
+		setCreateDate();
 		this.docName = docName;
 		this.docOwner = ownerUserName;
 		this.docBody = docBody;
@@ -82,12 +83,20 @@ public class Document {
 		return docDescription;
 	}
 	
-	public void setDate() {
-		this.date = new SimpleDateFormat("MM/dd/yyyy HH:mm").format(Calendar.getInstance().getTime());
+	public void setCreateDate() {
+		this.createDate = new SimpleDateFormat("MM/dd/yyyy HH:mm").format(Calendar.getInstance().getTime());
 	}
 	
-	public String getDate() {
-		return date;
+	public void setModifyDate() {
+		this.modifyDate = new SimpleDateFormat("MM/dd/yyyy HH:mm").format(Calendar.getInstance().getTime());
+	}
+	
+	public String getCreateDate() {
+		return createDate;
+	}
+	
+	public String getModifyDate() {
+		return modifyDate;
 	}
 	
 	@Override

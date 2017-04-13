@@ -2,11 +2,11 @@ package cirrus.views;
 
 import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
-
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.shared.ui.button.ButtonServerRpc;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -21,7 +21,6 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.themes.ValoTheme;
-
 import cirrus.Sections;
 import cirrus.backend.Backend;
 import cirrus.backend.DocumentBackend;
@@ -83,7 +82,6 @@ public class HomeView extends VerticalLayout implements View {
 			subwindow.close();
 			
 			getUI().getNavigator().navigateTo("document/" + doc.getDocId());
-			
 		});
         
 		// Add content to subwindow
@@ -124,10 +122,16 @@ public class HomeView extends VerticalLayout implements View {
 		//-------------------------------------------------------------
 		*/
 		
-		// Main layout to hold the panel -----------------------------
+		// Main layout to hold the panel
         HorizontalLayout mainLayout = new HorizontalLayout();
         mainLayout.setSizeFull();
         mainLayout.setSpacing(true);
+        mainLayout.addLayoutClickListener(event -> {
+        	// Collapse side panel 
+        	if (sidePanel.isVisible()) {
+        		sidePanel.setVisible(false);
+        	}
+        });
      
         // Panel that displays documents
         Panel panel = createPanel();       
@@ -147,14 +151,15 @@ public class HomeView extends VerticalLayout implements View {
 	}
 	
 	// document list
-	private Panel createPanel()
-	{
+	private Panel createPanel() {
 		Panel panel = new Panel();
-		CssLayout layout = new CssLayout();
+		//CssLayout layout = new CssLayout();
+		HorizontalLayout layout = new HorizontalLayout();
+		layout.setMargin(true);  // Fix outside margin
+		layout.setSpacing(true); // Fix spacing between buttons
 		layout.setSizeFull();
 		
-		for (Document doc : mBackend.getUsersDocs())
-		{
+		for (Document doc : mBackend.getUsersDocs()) {
 			Button button = new Button(doc.getDocName());
 			button.setData(doc);
 			button.setIcon(FontAwesome.FOLDER);
@@ -164,16 +169,26 @@ public class HomeView extends VerticalLayout implements View {
 				public void buttonClick(ClickEvent event)
 				{
 					Document doc = (Document) event.getButton().getData();
+					// When successfully double clicked
 					if (doubleClicked && bTemp.equals(event.getButton()) && System.currentTimeMillis()-clickTimer < 500) {
+						// Open new document in document view
 						getUI().getNavigator().navigateTo("document/" + doc.getDocId());
+						
+						// Reset double click condition and hide side panels
 						doubleClicked = false;
 						sidePanel.setVisible(false);
+					// When single clicked
 					} else {
+						// Begin timer to check for double click and store current button
 						clickTimer = System.currentTimeMillis();
 						bTemp = event.getButton();
 						doubleClicked = true;
+						
+						// Generate and show side-panel
 						sidePanel.setVisible(true);
 						sidePanel.setContent(genSidePanelContent(doc));
+						
+						button.setIcon(FontAwesome.FOLDER);
 					}
 				}
 			});
@@ -193,7 +208,11 @@ public class HomeView extends VerticalLayout implements View {
 		content.addComponent(new Label("<b>Owner:</b> " + doc.getDocOwner().getUserName(), com.vaadin.shared.ui.label.ContentMode.HTML));
 		content.addComponent(new Label("<b>Name:</b> " + doc.getDocName(), com.vaadin.shared.ui.label.ContentMode.HTML));
 		content.addComponent(new Label("<b>Description:</b> " + doc.getDocDescription(), com.vaadin.shared.ui.label.ContentMode.HTML));
-		content.addComponent(new Label("<b>Date:</b> " + doc.getDate(), com.vaadin.shared.ui.label.ContentMode.HTML));
+		content.addComponent(new Label("<b>Date:</b> " + doc.getCreateDate(), com.vaadin.shared.ui.label.ContentMode.HTML));
+		
+		if (doc.getModifyDate() != null) 
+			content.addComponent(new Label("<b>Modified:</b> " + doc.getModifyDate(), com.vaadin.shared.ui.label.ContentMode.HTML));
+		
 		content.setSizeFull();
 		
 		return content;
