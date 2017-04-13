@@ -117,6 +117,7 @@ public class DocumentView extends VerticalLayout implements View {
 					doc = mBackend.getDocument(docId);
 					doc.setDocName(docName.getValue());
 					doc.setDocBody(docBody.getValue());
+					doc.setModifyDate();
 				}
 				mBackend.saveDocument(doc);
 			}
