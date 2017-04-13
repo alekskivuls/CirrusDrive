@@ -155,16 +155,13 @@ public class HomeView extends VerticalLayout implements View {
 		Panel panel = new Panel();
 		//CssLayout layout = new CssLayout();
 		HorizontalLayout layout = new HorizontalLayout();
-		layout.setMargin(true);
-		layout.setSpacing(true);
+		layout.setMargin(true);  // Fix outside margin
+		layout.setSpacing(true); // Fix spacing between buttons
 		layout.setSizeFull();
-		//layout.setWidth("100%");
 		
 		for (Document doc : mBackend.getUsersDocs()) {
 			Button button = new Button(doc.getDocName());
 			button.setData(doc);
-			//button.setWidth("10%");
-			//button.setHeight("10%");
 			button.setIcon(FontAwesome.FOLDER);
 			button.addStyleName(BaseTheme.BUTTON_LINK);
 			button.addClickListener(new Button.ClickListener()
@@ -176,15 +173,17 @@ public class HomeView extends VerticalLayout implements View {
 					if (doubleClicked && bTemp.equals(event.getButton()) && System.currentTimeMillis()-clickTimer < 500) {
 						// Open new document in document view
 						getUI().getNavigator().navigateTo("document/" + doc.getDocId());
-						// Reset double click condition and hide side panel
+						
+						// Reset double click condition and hide side panels
 						doubleClicked = false;
 						sidePanel.setVisible(false);
 					// When single clicked
 					} else {
-					
+						// Begin timer to check for double click and store current button
 						clickTimer = System.currentTimeMillis();
 						bTemp = event.getButton();
 						doubleClicked = true;
+						
 						// Generate and show side-panel
 						sidePanel.setVisible(true);
 						sidePanel.setContent(genSidePanelContent(doc));
