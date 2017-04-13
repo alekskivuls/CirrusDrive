@@ -28,23 +28,27 @@ public class Docker {
 		}
 	}
 
-	public String createContainer(Language lang, String srcDir, String mainFile, String... srcFiles)
-			throws DockerCertificateException, DockerException, InterruptedException, Exception {
+	public String createContainer(Language lang, String srcDir, String mainFile, String... srcFiles) {
 		String srcs = "src/" + mainFile;
 		for (String src : srcFiles) {
 			srcs += " src/" + src;
 		}
-		switch (lang) {
-		case JAVA:
-			return createContainer(srcDir, "javac -encoding UTF-8 -sourcepath . -d . " + srcs,
-					"java " + mainFile.substring(0, mainFile.lastIndexOf('.')));
-		case PYTHON:
-			return createContainer(srcDir, "python3 src/" + mainFile);
-		case CPP:
-			return createContainer(srcDir, "g++ " + srcs, "./a.out");
-		default:
-			throw new Exception("Language not supported");
+		try {
+			switch (lang) {
+			case JAVA:
+				return createContainer(srcDir, "javac -encoding UTF-8 -sourcepath . -d . " + srcs,
+						"java main");// + mainFile.substring(0, mainFile.lastIndexOf('.')));
+			case PYTHON:
+				return createContainer(srcDir, "python3 src/" + mainFile);
+			case CPP:
+				return createContainer(srcDir, "g++ " + srcs, "./a.out");
+			default:
+				throw new Exception("Language not supported");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return null;
 	}
 
 	private String createContainer(String mountDir, String... args)
@@ -60,8 +64,8 @@ public class Docker {
 			throws DockerCertificateException, DockerException, InterruptedException {
 		Builder configBuilder = HostConfig.builder();
 		if (mountDir != null) {
-			String srcPath = Docker.class.getResource(mountDir).getPath();
-			configBuilder.appendBinds(Bind.from(srcPath).to("/src").readOnly(true).build());
+			//String srcPath = Docker.class.getResource(mountDir).getPath();
+			configBuilder.appendBinds(Bind.from(mountDir).to("/src").readOnly(true).build());
 		}
 		final HostConfig hostConfig = configBuilder.build();
 
