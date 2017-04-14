@@ -128,7 +128,6 @@ public class DocumentView extends VerticalLayout implements View {
 				Notification.show("Program Execution", result, Notification.Type.HUMANIZED_MESSAGE);
 			}
 		};
-
 		return listener;
 	}
 
