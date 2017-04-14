@@ -14,6 +14,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -123,7 +124,8 @@ public class DocumentView extends VerticalLayout implements View {
 	private Button.ClickListener createRunAction() {
 		Button.ClickListener listener = new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
-				mBackend.runProgram(docBody.getValue());
+				String result = mBackend.runProgram(docBody.getValue());
+				Notification.show("Program Execution", result, Notification.Type.HUMANIZED_MESSAGE);
 			}
 		};
 

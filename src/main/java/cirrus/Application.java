@@ -102,7 +102,7 @@ public class Application {
 			
 			// save a couple docs
 			Document doc1 = new Document(admin, "Doc1");
-			doc1.setDocBody("class main {\npublic static void main(String[] args) {\nSystem.out.println(\"Hello World\");\n}\n}");
+			doc1.setDocBody("class main {\n\tpublic static void main(String[] args) {\n\t\tSystem.out.println(\"Hello World\");\n\t}\n}");
 			doc1.setDocDescription("Contains all relevant information to the cirrus project.");
 			docRepo.save(doc1);
 			Document doc2 = new Document(regular, "Doc2");

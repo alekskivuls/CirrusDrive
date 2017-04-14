@@ -44,8 +44,7 @@ public class DocumentBackendBean implements DocumentBackend {
 	
 	@Override
 	public String runProgram(String programSrc) {
-		System.out.println(dockerService.runProgram(programSrc));
-		return null;
+		return dockerService.runProgram(programSrc);
 	}
 	
 }
