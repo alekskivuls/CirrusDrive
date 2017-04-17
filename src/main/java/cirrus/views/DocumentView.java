@@ -51,20 +51,24 @@ public class DocumentView extends VerticalLayout implements View {
 		setSizeFull();
 		setMargin(true);
 
-		for (Component component : mDocView.getLoadOrder()) {
-			if (component instanceof TextField) {
+		for ( Component component : mDocView.getLoadOrder() )
+		{
+			if ( component instanceof TextField )
+			{
 				TextField text = (TextField) component;
-				if (text.getId().equals("DocumentNameField")) {
+				if ( text.getId().equals("DocumentNameField") )
 					docName = text;
-				}
-			} else if (component instanceof HorizontalLayout) {
+			}
+			else if ( component instanceof HorizontalLayout )
+			{
 				HorizontalLayout layout = (HorizontalLayout) component;
 				this.setButtonListeners(layout);
 			}
-
+			
 			this.addComponent(component);
-
-			if (component instanceof Panel) {
+			
+			if ( component instanceof Panel )
+			{
 				Panel panel = (Panel) component;
 				this.setExpandRatio(panel, 1.0f);
 				docBody = (TextArea) panel.getContent();
@@ -73,8 +77,10 @@ public class DocumentView extends VerticalLayout implements View {
 		}
 	}
 
-	private void setButtonListeners(HorizontalLayout layout) {
-		for (int i = 0; i < layout.getComponentCount(); ++i) {
+	private void setButtonListeners(HorizontalLayout layout)
+	{
+		for (int i = 0; i < layout.getComponentCount(); ++i)
+		{
 			Component component = layout.getComponent(i);
 			if (component instanceof Button) {
 				Button button = (Button) component;

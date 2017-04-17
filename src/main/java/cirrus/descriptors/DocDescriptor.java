@@ -3,18 +3,23 @@ package cirrus.descriptors;
 import java.util.LinkedList;
 
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Sizeable.Unit;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 import cirrus.templates.Descriptor;
 
@@ -38,6 +43,7 @@ public class DocDescriptor extends Descriptor {
 		this.mLoadOrder.add(this.initToolbar());
 		this.mLoadOrder.add(this.initBuildMenu());
 		this.mLoadOrder.add(this.initPanel());
+		this.mLoadOrder.add(this.initConsole());
 	}
 
 	private MenuBar initMenubar() {
@@ -115,12 +121,6 @@ public class DocDescriptor extends Descriptor {
 	}
 
 	private MenuBar initBuildMenu() {
-		// MenuBar.Command runCode = new MenuBar.Command() {
-		// public void menuSelected(MenuItem selectedItem) {
-		// System.out.println(selectedItem.getText());
-		// }
-		// };
-
 		MenuBar buildMenu = new MenuBar();
 		MenuItem build = buildMenu.addItem("Build", FontAwesome.CHECK_CIRCLE, null);
 		MenuItem run = buildMenu.addItem("Run", FontAwesome.PLAY_CIRCLE_O, null);
@@ -138,9 +138,41 @@ public class DocDescriptor extends Descriptor {
 		panel.setContent(docBody);
 		return panel;
 	}
+	
+	private Component initConsole()
+	{
+		TabSheet console = new TabSheet();
+		console.setId("DocumentTabs");
+		console.setHeight(200, Unit.PIXELS);
+        console.addStyleName(ValoTheme.TABSHEET_FRAMED);
+        console.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
+ 
+        String[] tabNames = new String[] { "Console" };
+        for (int i = 0; i < tabNames.length; ++i )
+        {
+        	// Change to TextArea and send Console Output here.
+        	// Try this:
+//        	TextArea docBody = new TextArea();
+//    		docBody.setWordwrap(false);
+//    		docBody.setSizeFull();
+        	
+            final Label label = new Label("Some message goes here: "+i+'\n', ContentMode.HTML);
+            label.setWidth(100.0f, Unit.PERCENTAGE);
+ 
+            final VerticalLayout tab = new VerticalLayout(label);
+            tab.setMargin(true);
+            tab.setSizeFull();
+            
+            console.addTab( tab, tabNames[i] );
+        }
+        
+        return console;
+	}
 
-	private class PrefSubwindow extends Window {
-		public PrefSubwindow(final String windowName) {
+	private class PrefSubwindow extends Window
+	{
+		public PrefSubwindow(final String windowName)
+		{
 			super(windowName); // Set window caption
 
 			mName = windowName;

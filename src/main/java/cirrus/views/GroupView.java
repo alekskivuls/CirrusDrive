@@ -41,10 +41,12 @@ import cirrus.models.UserGroup;
 @SideBarItem(sectionId = Sections.VIEWS, caption = "Group View")
 @FontAwesomeIcon(FontAwesome.GROUP)
 
-public class GroupView extends VerticalLayout implements View {
+public class GroupView extends VerticalLayout implements View
+{
 	final Backend mBackend;
 	
-	class SubWindow extends Window {
+	class SubWindow extends Window
+	{
 		public SubWindow() {
 			super("Group Editor");
 			center();
@@ -111,7 +113,8 @@ public class GroupView extends VerticalLayout implements View {
 	}
 	
 	// group list
-	Panel createPanel() {
+	Panel createPanel()
+	{
 		Panel panel = new Panel();
 		CssLayout layout = new CssLayout();
 		layout.setSizeFull();
