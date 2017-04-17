@@ -176,22 +176,23 @@ public class DocDescriptor extends Descriptor {
 			super(windowName); // Set window caption
 
 			mName = windowName;
-			center();
-
-			this.setWidth(400, Unit.PIXELS);
-			this.setHeight(300, Unit.PIXELS);
+			
+			this.center();
+			this.setResizable( true );
+			this.setWidth(50, Unit.PERCENTAGE);
+			this.setHeight(50, Unit.PERCENTAGE);
 
 			VerticalLayout content = new VerticalLayout();
 			content.addComponent(new CheckBox("Show Line Numbers"));
-
+			
 			HorizontalLayout buttons = new HorizontalLayout();
 			buttons.addComponent(new Button("Save"));
 			buttons.addComponent(new Button("Close " + mName + " Test", event -> close()));
-
+			
 			// Disable the close button
 			this.setClosable(false);
 			this.setResizable(false);
-
+			
 			content.addComponent(buttons);
 			this.setContent(content);
 		}

@@ -48,8 +48,8 @@ public class DocumentView extends VerticalLayout implements View {
 		this.setMargin(true);
 
 		mDocView = new DocDescriptor();
-		setSizeFull();
-		setMargin(true);
+		this.setSizeFull();
+		this.setMargin(true);
 
 		for ( Component component : mDocView.getLoadOrder() )
 		{
