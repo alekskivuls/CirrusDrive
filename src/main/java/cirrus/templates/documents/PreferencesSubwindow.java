@@ -6,11 +6,9 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class PreferenceSubwindow extends Window {
-	public PreferenceSubwindow(final String windowName) {
-		super(windowName); // Set window caption
-
-		mName = windowName;
+public class PreferencesSubwindow extends Window {
+	public PreferencesSubwindow() {
+		super("Preferences"); // Set window caption
 
 		this.center();
 		this.setResizable(true);
@@ -22,7 +20,7 @@ public class PreferenceSubwindow extends Window {
 
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.addComponent(new Button("Save"));
-		buttons.addComponent(new Button("Close " + mName + " Test", event -> close()));
+		buttons.addComponent(new Button("Close preferences", event -> close()));
 
 		// Disable the close button
 		this.setClosable(false);
@@ -31,6 +29,4 @@ public class PreferenceSubwindow extends Window {
 		content.addComponent(buttons);
 		this.setContent(content);
 	}
-
-	private final String mName;
 }

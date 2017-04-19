@@ -2,11 +2,10 @@ package cirrus.templates.documents;
 
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.MenuBar.Command;
 
 public class FileMenuBar extends MenuBar {
 
-	MenuItem menuFile, menuImport, menuExport, menuSave, menuTrash, menuEdit, menuView, menuOptions;
+	public MenuItem menuFile, menuImport, menuExport, menuSave, menuTrash, menuEdit, menuView, menuOptions;
 
 	public FileMenuBar() {
 		// MenuBar File, Edit, Views, Tools?
@@ -35,13 +34,5 @@ public class FileMenuBar extends MenuBar {
 		// }
 		// };
 		// MenuItem pref = menuOptions.addItem("Preferences", null, mycommand);
-	}
-	
-	public void setSaveCmd(Command command) {
-		menuSave.setCommand(command);
-	}
-	
-	public void setTrashCmd(Command command) {
-		menuTrash.setCommand(command);
 	}
 }

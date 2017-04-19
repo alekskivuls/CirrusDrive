@@ -10,27 +10,18 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.MenuBar.MenuItem;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import cirrus.Sections;
 import cirrus.backend.DocumentBackend;
-import cirrus.descriptors.DocDescriptor;
 import cirrus.models.Document;
-import cirrus.templates.Descriptor;
 import cirrus.templates.documents.BuildMenuBar;
-import cirrus.templates.documents.DocNameField;
 import cirrus.templates.documents.DocumentPanel;
 import cirrus.templates.documents.DocumentTabs;
 import cirrus.templates.documents.FileMenuBar;
+import cirrus.templates.documents.PreferencesSubwindow;
 
 /**
  * View for view documents.
@@ -43,7 +34,7 @@ public class DocumentView extends VerticalLayout implements View {
 	private final DocumentBackend mBackend;
 	Document doc;
 	FileMenuBar fileMenuBar;
-	DocNameField docNameField;
+	TextField docNameField;
 	BuildMenuBar buildMenuBar;
 	DocumentPanel documentPanel;
 	DocumentTabs documentTabs;
@@ -55,11 +46,12 @@ public class DocumentView extends VerticalLayout implements View {
 		this.setMargin(true);
 
 		fileMenuBar = new FileMenuBar();
-		fileMenuBar.setSaveCmd(e -> save());
-		fileMenuBar.setTrashCmd(e -> delete());
+		fileMenuBar.menuSave.setCommand(e -> save());
+		fileMenuBar.menuTrash.setCommand(e -> delete());
+		fileMenuBar.menuOptions.setCommand(e -> showPreferences());
 		this.addComponent(fileMenuBar);
 
-		docNameField = new DocNameField();
+		docNameField = new TextField();
 		this.addComponent(docNameField);
 
 		buildMenuBar = new BuildMenuBar();
@@ -79,18 +71,18 @@ public class DocumentView extends VerticalLayout implements View {
 	public void enter(ViewChangeEvent event) {
 		if (event.getParameters() != null) {
 			try {
-				int docId = Integer.parseInt(event.getParameters());
-				doc = mBackend.getDocument(docId);
-				docNameField.setDocName(doc.getDocName());
+				if (!event.getParameters().equals("")) {
+					int docId = Integer.parseInt(event.getParameters());
+					doc = mBackend.getDocument(docId);
+				} else {
+					doc = new Document(mBackend.getCurrentUser(), "", "");
+				}
+				docNameField.setValue(doc.getDocName());
 				documentPanel.setDocBody(doc.getDocBody());
-				System.out.println(doc.getDocName());
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;
 			}
-		} else {
-			System.out.println("null");
-			doc = new Document(mBackend.getCurrentUser(), "", "");
 		}
 	}
 
@@ -109,5 +101,10 @@ public class DocumentView extends VerticalLayout implements View {
 	public void delete() {
 		mBackend.deleteDocument(doc.getDocId());
 		getUI().getNavigator().navigateTo("");
+	}
+	
+	public void showPreferences() {
+		PreferencesSubwindow pref = new PreferencesSubwindow();
+		UI.getCurrent().addWindow(pref);
 	}
 }
