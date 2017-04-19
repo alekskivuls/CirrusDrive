@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class User {
 
 	@Id
-	@GeneratedValue( strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int userId;
 	private String userName;
 	private String password;
@@ -17,9 +17,9 @@ public class User {
 	private String lastName;
 	private Role role;
 
-	protected User() {
+	public User() {
 	}
-	
+
 	public User(String userName, String password, String firstName, String lastName, Role role) {
 		this.userName = userName;
 		this.password = password;
@@ -40,14 +40,18 @@ public class User {
 		return userName;
 	}
 
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -63,22 +67,23 @@ public class User {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	
-	public int getId(){
+
+	public int getId() {
 		return userId;
 	}
-	
+
 	public Role getRole() {
 		return role;
 	}
-	
+
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	
+
 	@Override
 	public String toString() {
-		return String.format("User[userName='%s', password='%s', firstName='%s', lastName='%s', role='%s']", userName, password, firstName, lastName, role);
+		return String.format("User[userName='%s', password='%s', firstName='%s', lastName='%s', role='%s']", userName,
+				password, firstName, lastName, role);
 	}
 
 }

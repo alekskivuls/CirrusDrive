@@ -11,6 +11,6 @@ public class DockerUtilTest {
 	@Test
 	public void createTempSrcDir() {
 		String folderPath = DockerUtil.createTmpSrcDir(Arrays.asList("body"), "java");
-		assertTrue(new File(folderPath + "\0.java").exists());
+		assertTrue(new File(folderPath + "/0.java").exists());
 	}
 }

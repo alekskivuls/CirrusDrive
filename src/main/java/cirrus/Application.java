@@ -1,7 +1,5 @@
 package cirrus;
 
-import java.util.HashSet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -22,10 +20,9 @@ import cirrus.models.Role;
 import cirrus.models.User;
 import cirrus.models.UserGroup;
 import cirrus.repositories.DocumentRepository;
-import cirrus.repositories.UserRepository;
 import cirrus.repositories.GroupRepository;
+import cirrus.repositories.UserRepository;
 import cirrus.services.UsersDetailService;
-import cirrus.services.UsersService;
 
 @SpringBootApplication(exclude = org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class)
 @EnableVaadinManagedSecurity

@@ -2,16 +2,16 @@ package cirrus.views;
 
 import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
+
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.shared.ui.button.ButtonServerRpc;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -19,8 +19,8 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.themes.ValoTheme;
+
 import cirrus.Sections;
 import cirrus.backend.Backend;
 import cirrus.backend.DocumentBackend;
@@ -163,7 +163,7 @@ public class HomeView extends VerticalLayout implements View {
 			Button button = new Button(doc.getDocName());
 			button.setData(doc);
 			button.setIcon(FontAwesome.FOLDER);
-			button.addStyleName(BaseTheme.BUTTON_LINK);
+			//button.addStyleName(BaseTheme.BUTTON_LINK);
 			button.addClickListener(new Button.ClickListener()
 			{
 				public void buttonClick(ClickEvent event)
@@ -205,13 +205,13 @@ public class HomeView extends VerticalLayout implements View {
 		FormLayout content = new FormLayout();
 		
 		content.addStyleName("mypanelcontent");
-		content.addComponent(new Label("<b>Owner:</b> " + doc.getDocOwner().getUserName(), com.vaadin.shared.ui.label.ContentMode.HTML));
-		content.addComponent(new Label("<b>Name:</b> " + doc.getDocName(), com.vaadin.shared.ui.label.ContentMode.HTML));
-		content.addComponent(new Label("<b>Description:</b> " + doc.getDocDescription(), com.vaadin.shared.ui.label.ContentMode.HTML));
-		content.addComponent(new Label("<b>Date:</b> " + doc.getCreateDate(), com.vaadin.shared.ui.label.ContentMode.HTML));
+		content.addComponent(new Label("<b>Owner:</b> " + doc.getDocOwner().getUserName(), ContentMode.HTML));
+		content.addComponent(new Label("<b>Name:</b> " + doc.getDocName(), ContentMode.HTML));
+		content.addComponent(new Label("<b>Description:</b> " + doc.getDocDescription(), ContentMode.HTML));
+		content.addComponent(new Label("<b>Date:</b> " + doc.getCreateDate(), ContentMode.HTML));
 		
 		if (doc.getModifyDate() != null) 
-			content.addComponent(new Label("<b>Modified:</b> " + doc.getModifyDate(), com.vaadin.shared.ui.label.ContentMode.HTML));
+			content.addComponent(new Label("<b>Modified:</b> " + doc.getModifyDate(), ContentMode.HTML));
 		
 		content.setSizeFull();
 		

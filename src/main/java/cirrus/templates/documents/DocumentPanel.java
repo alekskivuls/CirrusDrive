@@ -8,7 +8,7 @@ public class DocumentPanel extends Panel {
 
 	public DocumentPanel() {
 		docBody = new TextArea();
-		docBody.setWordwrap(false);
+		docBody.setWordWrap(false);
 		docBody.setSizeFull();
 		setSizeFull();
 		setContent(docBody);
