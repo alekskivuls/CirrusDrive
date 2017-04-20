@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/alekskivuls/CirrusDrive.svg?branch=master)]
+![Build Status](https://travis-ci.org/alekskivuls/CirrusDrive.svg?branch=master)
 
 # CirrusDrive
 Cloud data storage and code execution.
@@ -11,3 +11,6 @@ For other IDEs follow standard import of Maven project.
 
 ## Running
 For STS, navigate to Application.java and run as Spring Boot App. Open your browser to localhost:8080 to see the website.
+
+## Dependencies
+Requires docker installed to run programs. Also requires cirrusbox, the docker container used to run the code. Refer to travis.yml for info on how to build.
