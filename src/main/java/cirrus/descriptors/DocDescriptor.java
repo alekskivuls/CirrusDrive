@@ -1,15 +1,18 @@
-package cirrus.Descriptors;
+package cirrus.descriptors;
 
 import java.util.LinkedList;
 
+import com.vaadin.annotations.Theme;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -30,6 +33,23 @@ public class DocDescriptor extends Descriptor
 	{
 		mLoadOrder = new LinkedList<Component>();
 		this.init();
+		
+		// Display line numbers on left side using JS
+		// TODO: Figure out how to move style code to CSS file
+		StringBuilder sb = new StringBuilder("var panel = document.querySelector('div.v-panel-content');panel.style.setProperty('float','right');");
+		sb.append("var textPanel = document.querySelector('.v-panel-content'); var textArea = document.querySelector('textarea');")
+			.append("var p = document.createElement('div');p.classList.add('lineNumbers');p.style.setProperty('position','absolute');")
+			.append("p.style.setProperty('width','30px');p.style.setProperty('height','100%');textArea.style.setProperty('padding-left','30px');")
+			.append("textArea.style.setProperty('font-family','courier'); p.style.setProperty('font-family','courier');textPanel.insertBefore(p, textArea);")
+			.append("for (var i = 1; i <= 50; i++) {var num = document.createElement('p');num.innerHTML = i;p.appendChild(num);num.style.setProperty('margin','0');}")
+			.append("p.style.setProperty('margin','0'); p.style.setProperty('border','solid .5px #ddd');");
+								
+		String script = sb.toString();	
+		//String script = "function repeat(){var iframedDocument = document.querySelector('.gwt-RichTextArea').contentWindow.document;var p = iframedDocument.createElement('div');p.style.setProperty('float','left');p.style.setProperty('background-color','red');p.style.setProperty('width','30px');p.style.setProperty('height','100%');iframedDocument.body.appendChild(p);for (var i = 1; i <= 20; i++) {var num = iframedDocument.createElement('p');num.innerHTML = i;p.appendChild(num);}}setTimeout(repeat,3000);";
+
+		JavaScript.getCurrent().execute(script);
+		
+
 	}
 
 	@Override
@@ -125,7 +145,7 @@ public class DocDescriptor extends Descriptor
 	{
 		Panel panel = new Panel();
 		TextArea docBody = new TextArea();
-		docBody.setWordwrap(false);
+		//docBody.setWordwrap(false);
 		docBody.setSizeFull();
 
 		panel.setSizeFull();
@@ -133,6 +153,7 @@ public class DocDescriptor extends Descriptor
 		return panel;
 	}
 	
+
 	private class PrefSubwindow extends Window {
 	    public PrefSubwindow(final String windowName) {
 	        super(windowName); // Set window caption

@@ -6,6 +6,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
 
+import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
@@ -15,12 +16,13 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.RichTextArea;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import cirrus.Sections;
-import cirrus.Descriptors.DocDescriptor;
+import cirrus.descriptors.DocDescriptor;
 import cirrus.backend.DocumentBackend;
 import cirrus.models.Document;
 import cirrus.templates.Descriptor;
