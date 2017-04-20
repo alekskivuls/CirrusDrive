@@ -1,5 +1,15 @@
+sudo: required
+
 language: java
+
+services:
+  - docker
+
 notifications:
   email: false
+
 jdk:
   - oraclejdk8
+
+before_install:
+  - docker build -t cirrusbox .
