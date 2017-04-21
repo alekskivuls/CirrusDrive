@@ -6,20 +6,10 @@ import org.springframework.security.access.annotation.Secured;
 import org.vaadin.spring.sidebar.annotation.FontAwesomeIcon;
 import org.vaadin.spring.sidebar.annotation.SideBarItem;
 
-import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.JavaScript;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.RichTextArea;
-import com.vaadin.ui.TextArea;
-
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -48,6 +38,7 @@ public class DocumentView extends VerticalLayout implements View {
 	BuildMenuBar buildMenuBar;
 	DocumentPanel documentPanel;
 	DocumentTabs documentTabs;
+	PreferencesSubwindow prefWindow;
 
 	@Autowired
 	public DocumentView(DocumentBackend backend) {
@@ -74,12 +65,13 @@ public class DocumentView extends VerticalLayout implements View {
 
 		documentTabs = new DocumentTabs();
 		this.addComponent(documentTabs);
+
+		prefWindow = new PreferencesSubwindow();
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		if (event.getParameters() != 
-				null) {
+		if (event.getParameters() != null) {
 			try {
 				if (!event.getParameters().equals("")) {
 					int docId = Integer.parseInt(event.getParameters());
@@ -112,9 +104,12 @@ public class DocumentView extends VerticalLayout implements View {
 		mBackend.deleteDocument(doc.getDocId());
 		getUI().getNavigator().navigateTo("");
 	}
-	
+
 	public void showPreferences() {
-		PreferencesSubwindow pref = new PreferencesSubwindow();
-		UI.getCurrent().addWindow(pref);
+		try {
+			UI.getCurrent().addWindow(prefWindow);
+		} catch (Exception e) {
+			//Window is already visible
+		}
 	}
 }
