@@ -3,6 +3,7 @@ package cirrus.templates.documents;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -16,10 +17,12 @@ public class PreferencesSubwindow extends Window {
 		this.setHeight(50, Unit.PERCENTAGE);
 
 		VerticalLayout content = new VerticalLayout();
-		content.addComponent(new CheckBox("Show Line Numbers"));
+		CheckBox checkbox = new CheckBox("Show Line Numbers");
+		content.addComponent(checkbox);
 
 		HorizontalLayout buttons = new HorizontalLayout();
-		buttons.addComponent(new Button("Save"));
+		Button save = new Button("Save");
+		buttons.addComponent(save);
 		buttons.addComponent(new Button("Close preferences", event -> close()));
 
 		// Disable the close button
@@ -28,5 +31,40 @@ public class PreferencesSubwindow extends Window {
 
 		content.addComponent(buttons);
 		this.setContent(content);
+		
+		save.addClickListener(event -> {
+			if (checkbox.getValue()){
+				showLineNumbers();
+				checkbox.setValue(true);
+			}
+			else
+				hideLineNumbers();
+			});
+	}
+	
+	public void showLineNumbers() {
+
+		// Display line numbers on left side using JS
+		// TODO: Figure out how to move style code to CSS file
+		StringBuilder sb = new StringBuilder("var panel = document.querySelector('div.v-panel-content');");
+		sb.append("var textPanel = document.querySelector('.v-panel-content'); var textArea = document.querySelector('textarea');")
+			.append("var p = document.createElement('div');p.classList.add('lineNumbers');p.style.setProperty('position','absolute');")
+			.append("p.style.setProperty('width','30px');p.style.setProperty('height','100%');textArea.style.setProperty('padding-left','30px');")
+			.append("textArea.style.setProperty('font-family','courier'); p.style.setProperty('font-family','courier');textPanel.insertBefore(p, textArea);")
+			.append("for (var i = 1; i <= 50; i++) {var num = document.createElement('p');num.innerHTML = i;p.appendChild(num);num.style.setProperty('margin','0');}")
+			.append("p.style.setProperty('margin','0'); p.style.setProperty('border','solid .5px #ddd');");
+								
+		String script = sb.toString();	
+		JavaScript.getCurrent().execute(script);
+	}
+	
+	public void hideLineNumbers() {
+		StringBuilder sb = new StringBuilder("var panel = document.querySelector('div.v-panel-content');");	
+		sb.append("var lineNumbers = panel.querySelector('.lineNumbers'); panel.removeChild(lineNumbers); panel.children[0].style.setProperty('padding-left','0');");
+		
+		String script = sb.toString();
+		JavaScript.getCurrent().execute(script);
+
+		
 	}
 }

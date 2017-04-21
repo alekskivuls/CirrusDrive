@@ -120,7 +120,8 @@ public class GroupDescriptor extends Descriptor
 			
 			
 			HorizontalLayout buttons = new HorizontalLayout();
-			buttons.addComponent(new Button("OK"));
+			Button save = new Button("Save");
+			buttons.addComponent(save);
 			buttons.addComponent(new Button("Cancel", event -> close()));
 			
 			
