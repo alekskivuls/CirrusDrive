@@ -153,10 +153,10 @@ public class GroupDescriptor extends Descriptor
 		{
 			List<String> data = IntStream.range(0, 6).mapToObj(i -> "Option " + i).collect(Collectors.toList());
 			
-			ListSelect listOfUsers = new ListSelect("Select an option", data);
+			ListSelect<String> listOfUsers = new ListSelect<>("Select an option", data);
 			listOfUsers.setRows(10);
 			listOfUsers.setWidth(150.0f, Unit.PIXELS);
-			listOfUsers.setMultiSelect( true );
+//			listOfUsers.setMultiSelect( true );
 //			listOfUsers.addValueChangeListener(event -> Notification.show("Value changed:", String.valueOf(((Label) event).getValue()),
 //					Type.TRAY_NOTIFICATION));
 	        
@@ -167,10 +167,10 @@ public class GroupDescriptor extends Descriptor
 		{
 			List<String> data = new LinkedList<String>();
 			
-			ListSelect listOfUsers = new ListSelect("Select an option", data);
+			ListSelect<String> listOfUsers = new ListSelect<>("Select an option", data);
 			listOfUsers.setRows(10);
 			listOfUsers.setWidth(150.0f, Unit.PIXELS);
-			listOfUsers.setMultiSelect( true );
+//			listOfUsers.setMultiSelect( true );
 	        return listOfUsers;
 		}
 	}

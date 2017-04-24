@@ -10,21 +10,18 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import cirrus.Sections;
 import cirrus.backend.DocumentBackend;
-import cirrus.descriptors.DocDescriptor;
 import cirrus.models.Document;
-import cirrus.templates.Descriptor;
+import cirrus.templates.documents.BuildMenuBar;
+import cirrus.templates.documents.DocumentPanel;
+import cirrus.templates.documents.DocumentTabs;
+import cirrus.templates.documents.FileMenuBar;
+import cirrus.templates.documents.PreferencesSubwindow;
 
 /**
  * View for view documents.
@@ -34,12 +31,14 @@ import cirrus.templates.Descriptor;
 @SideBarItem(sectionId = Sections.VIEWS, caption = "Document View")
 @FontAwesomeIcon(FontAwesome.ARCHIVE)
 public class DocumentView extends VerticalLayout implements View {
-	private final Descriptor mDocView;
-
 	private final DocumentBackend mBackend;
-	private TextField docName;
-	private TextArea docBody;
-	Integer docId;
+	Document doc;
+	FileMenuBar fileMenuBar;
+	TextField docNameField;
+	BuildMenuBar buildMenuBar;
+	DocumentPanel documentPanel;
+	DocumentTabs documentTabs;
+	PreferencesSubwindow prefWindow;
 
 	@Autowired
 	public DocumentView(DocumentBackend backend) {
@@ -47,107 +46,70 @@ public class DocumentView extends VerticalLayout implements View {
 		this.setSizeFull();
 		this.setMargin(true);
 
-		mDocView = new DocDescriptor();
-		this.setSizeFull();
-		this.setMargin(true);
+		fileMenuBar = new FileMenuBar();
+		fileMenuBar.menuSave.setCommand(e -> save());
+		fileMenuBar.menuTrash.setCommand(e -> delete());
+		fileMenuBar.menuOptions.setCommand(e -> showPreferences());
+		this.addComponent(fileMenuBar);
 
-		for ( Component component : mDocView.getLoadOrder() )
-		{
-			if ( component instanceof TextField )
-			{
-				TextField text = (TextField) component;
-				if ( text.getId().equals("DocumentNameField") )
-					docName = text;
-			}
-			else if ( component instanceof HorizontalLayout )
-			{
-				HorizontalLayout layout = (HorizontalLayout) component;
-				this.setButtonListeners(layout);
-			}
-			
-			this.addComponent(component);
-			
-			if ( component instanceof Panel )
-			{
-				Panel panel = (Panel) component;
-				this.setExpandRatio(panel, 1.0f);
-				docBody = (TextArea) panel.getContent();
-				panel.getComponentCount();
-			}
-		}
-	}
+		docNameField = new TextField();
+		this.addComponent(docNameField);
 
-	private void setButtonListeners(HorizontalLayout layout)
-	{
-		for (int i = 0; i < layout.getComponentCount(); ++i)
-		{
-			Component component = layout.getComponent(i);
-			if (component instanceof Button) {
-				Button button = (Button) component;
-				if (button.getId().equals("DocumentSave")) {
-					button.addClickListener(this.createSaveAction());
-				} else if (button.getId().equals("DocumentTrash")) {
-					button.addClickListener(this.createTrashAction());
-				} else if (button.getId().equals("DocumentRun")) {
-					button.addClickListener(this.createRunAction());
-				}
-			}
-		}
-	}
+		buildMenuBar = new BuildMenuBar();
+		buildMenuBar.setRunCmd(e -> runProgram());
+		this.addComponent(buildMenuBar);
 
-	private Button.ClickListener createTrashAction() {
-		Button.ClickListener listener = new Button.ClickListener() {
-			public void buttonClick(ClickEvent event) {
-				if (docId != null)
-					mBackend.deleteDocument(docId);
-				getUI().getNavigator().navigateTo("");
-			}
-		};
+		documentPanel = new DocumentPanel();
+		this.addComponent(documentPanel);
+		this.setExpandRatio(documentPanel, 1.0f);
 
-		return listener;
-	}
+		documentTabs = new DocumentTabs();
+		this.addComponent(documentTabs);
 
-	private Button.ClickListener createSaveAction() {
-		Button.ClickListener listener = new Button.ClickListener() {
-			public void buttonClick(ClickEvent event) {
-				Document doc = mBackend.getDocument(docId);
-				if (docId == null) {
-					doc = new Document(mBackend.getCurrentUser(), docName.getValue(), docBody.getValue());
-					docId = doc.getDocId();
-				} else {
-					doc = mBackend.getDocument(docId);
-					doc.setDocName(docName.getValue());
-					doc.setDocBody(docBody.getValue());
-					doc.setModifyDate();
-				}
-				mBackend.saveDocument(doc);
-			}
-		};
-
-		return listener;
-	}
-
-	private Button.ClickListener createRunAction() {
-		Button.ClickListener listener = new Button.ClickListener() {
-			public void buttonClick(ClickEvent event) {
-				String result = mBackend.runProgram(docBody.getValue());
-				Notification.show("Program Execution", result, Notification.Type.HUMANIZED_MESSAGE);
-			}
-		};
-		return listener;
+		prefWindow = new PreferencesSubwindow();
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if (event.getParameters() != null) {
 			try {
-				docId = Integer.parseInt(event.getParameters());
-				Document doc = mBackend.getDocument(docId);
-				docName.setValue(doc.getDocName());
-				docBody.setValue(doc.getDocBody());
+				if (!event.getParameters().equals("")) {
+					int docId = Integer.parseInt(event.getParameters());
+					doc = mBackend.getDocument(docId);
+				} else {
+					doc = new Document(mBackend.getCurrentUser(), "", "");
+				}
+				docNameField.setValue(doc.getDocName());
+				documentPanel.setDocBody(doc.getDocBody());
 			} catch (Exception e) {
+				e.printStackTrace();
 				return;
 			}
+		}
+	}
+
+	public void runProgram() {
+		String result = mBackend.runProgram(doc.getDocBody());
+		documentTabs.appendConsole(result);
+	}
+
+	public void save() {
+		doc.setDocName(docNameField.getValue());
+		doc.setDocBody(documentPanel.getDocBody());
+		doc.setModifyDate();
+		mBackend.saveDocument(doc);
+	}
+
+	public void delete() {
+		mBackend.deleteDocument(doc.getDocId());
+		getUI().getNavigator().navigateTo("");
+	}
+
+	public void showPreferences() {
+		try {
+			UI.getCurrent().addWindow(prefWindow);
+		} catch (Exception e) {
+			//Window is already visible
 		}
 	}
 }
