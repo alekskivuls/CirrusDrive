@@ -1,6 +1,9 @@
 package cirrus.descriptors;
 
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Sizeable.Unit;
@@ -12,6 +15,9 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.ListSelect;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -58,8 +64,8 @@ public class GroupDescriptor extends Descriptor
 				// create and display a new group
 				SubWindow sub = new SubWindow();
 				
-				sub.setWidth(50, Unit.PERCENTAGE);
-				sub.setHeight(50, Unit.PERCENTAGE);
+//				sub.setWidth(75, Unit.PERCENTAGE);
+//				sub.setHeight(75, Unit.PERCENTAGE);
 				
 				UI.getCurrent().addWindow(sub);
 			}
@@ -104,29 +110,68 @@ public class GroupDescriptor extends Descriptor
 		{
 			super("Group Editor");
 			this.center();
-			this.setClosable(false);
+			this.setClosable(true);
 			this.setResizable(true);
 			
 			VerticalLayout subContent = new VerticalLayout();
-			subContent.setSizeFull();
 			subContent.setSpacing(true);
 			subContent.setMargin(new MarginInfo(true, true, true, true));
 			
 			
-			HorizontalLayout newGroupLabel = new HorizontalLayout();
-			newGroupLabel.setMargin(new MarginInfo(false, true, true, false));
-			newGroupLabel.addComponent(new Label("Enter group name:   "));
-			newGroupLabel.addComponent(new TextField());
+			HorizontalLayout groupLabel = new HorizontalLayout();
+			groupLabel.setHeightUndefined();
+			groupLabel.setSpacing(true);
+			groupLabel.setMargin(new MarginInfo(false, true, false, true));
+			groupLabel.addComponent(new Label("Enter group name:   "));
+			groupLabel.addComponent(new TextField());
+			
+			HorizontalLayout userLayout = new HorizontalLayout();
+			userLayout.setHeightUndefined();
+			userLayout.setSpacing(true);
+			userLayout.setMargin(new MarginInfo(false, true, false, true));
+			userLayout.addComponent(getUserList());
+			userLayout.addComponent(getCurrentList());
 			
 			
 			HorizontalLayout buttons = new HorizontalLayout();
-			buttons.addComponent(new Button("OK"));
+			buttons.setHeightUndefined();
+			buttons.setSpacing(true);
+			buttons.setMargin(new MarginInfo(false, true, false, true));
+			buttons.addComponent(new Button("Save"));
 			buttons.addComponent(new Button("Cancel", event -> close()));
 			
 			
-			subContent.addComponent(newGroupLabel);
+			subContent.addComponent(groupLabel);
+			subContent.addComponent(userLayout);
 			subContent.addComponent(buttons);
+//			window.setContent(subContent);
+//			this.setContent(window);
 			this.setContent(subContent);
+		}
+		
+		private ListSelect getUserList()
+		{
+			List<String> data = IntStream.range(0, 6).mapToObj(i -> "Option " + i).collect(Collectors.toList());
+			
+			ListSelect listOfUsers = new ListSelect("Select an option", data);
+			listOfUsers.setRows(10);
+			listOfUsers.setWidth(150.0f, Unit.PIXELS);
+			listOfUsers.setMultiSelect( true );
+//			listOfUsers.addValueChangeListener(event -> Notification.show("Value changed:", String.valueOf(((Label) event).getValue()),
+//					Type.TRAY_NOTIFICATION));
+	        
+	        return listOfUsers;
+		}
+		
+		private ListSelect getCurrentList()
+		{
+			List<String> data = new LinkedList<String>();
+			
+			ListSelect listOfUsers = new ListSelect("Select an option", data);
+			listOfUsers.setRows(10);
+			listOfUsers.setWidth(150.0f, Unit.PIXELS);
+			listOfUsers.setMultiSelect( true );
+	        return listOfUsers;
 		}
 	}
 }

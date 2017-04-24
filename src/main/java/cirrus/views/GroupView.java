@@ -21,6 +21,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
@@ -50,6 +51,7 @@ import cirrus.models.UserGroup;
 public class GroupView extends VerticalLayout implements View
 {
 	GroupDescriptor mGroupView;
+	ListSelect listOfUsers;
 	final Backend mBackend;
 
 	public GroupView( Backend backend )
@@ -80,10 +82,16 @@ public class GroupView extends VerticalLayout implements View
 			{
 				this.setExpandRatio(component, 1.0f);
 			}
+			else if( component instanceof ListSelect )
+			{
+				listOfUsers = (ListSelect) component;
+			}
 		}
 	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {
+//		listOfUsers.addValueChangeListener(event -> Notification.show("Value changed:", String.valueOf(event.getValue()),
+//                Type.TRAY_NOTIFICATION));
 	}
 }
