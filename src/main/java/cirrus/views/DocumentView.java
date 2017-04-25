@@ -10,6 +10,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -62,6 +63,7 @@ public class DocumentView extends VerticalLayout implements View {
 		documentPanel = new DocumentPanel();
 		this.addComponent(documentPanel);
 		this.setExpandRatio(documentPanel, 1.0f);
+		tabToIndent();
 
 		documentTabs = new DocumentTabs();
 		this.addComponent(documentTabs);
@@ -111,5 +113,16 @@ public class DocumentView extends VerticalLayout implements View {
 		} catch (Exception e) {
 			//Window is already visible
 		}
+	}
+	
+	public void tabToIndent() {
+		StringBuilder sb = new StringBuilder("var textarea = document.querySelector('.v-textarea');");
+		sb.append("textarea.addEventListener('keydown', function(e) {")
+			.append("if(e.key == 'Tab') { e.preventDefault(); var s = this.selectionStart;")
+			.append("this.value = this.value.substring(0, this.selectionStart) + '\t' + this.value.substring(this.selectionEnd);")
+			.append("this.selectionEnd = s + 1;}});");
+								
+		String script = sb.toString();	
+		JavaScript.getCurrent().execute(script);
 	}
 }
