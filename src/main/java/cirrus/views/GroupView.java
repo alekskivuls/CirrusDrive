@@ -14,6 +14,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TwinColSelect;
 import com.vaadin.ui.VerticalLayout;
 
 import cirrus.Sections;
@@ -32,7 +33,7 @@ import cirrus.descriptors.GroupDescriptor;
 public class GroupView extends VerticalLayout implements View
 {
 	GroupDescriptor mGroupView;
-	ListSelect listOfUsers;
+	TwinColSelect listOfUsers;
 	final Backend mBackend;
 
 	public GroupView( Backend backend )
@@ -63,9 +64,9 @@ public class GroupView extends VerticalLayout implements View
 			{
 				this.setExpandRatio(component, 1.0f);
 			}
-			else if( component instanceof ListSelect )
+			else if( component instanceof TwinColSelect )
 			{
-				listOfUsers = (ListSelect) component;
+				listOfUsers = (TwinColSelect) component;
 			}
 		}
 	}

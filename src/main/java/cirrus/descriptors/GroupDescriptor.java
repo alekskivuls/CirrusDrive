@@ -20,6 +20,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.TwinColSelect;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -130,7 +131,8 @@ public class GroupDescriptor extends Descriptor
 			userLayout.setSpacing(true);
 			userLayout.setMargin(new MarginInfo(false, true, false, true));
 			userLayout.addComponent(getUserList());
-			userLayout.addComponent(getCurrentList());
+			
+//			userLayout.addComponent(getCurrentList());
 			
 			
 			HorizontalLayout buttons = new HorizontalLayout();
@@ -149,13 +151,14 @@ public class GroupDescriptor extends Descriptor
 			this.setContent(subContent);
 		}
 		
-		private ListSelect getUserList()
+		private TwinColSelect getUserList()
 		{
 			List<String> data = IntStream.range(0, 6).mapToObj(i -> "Option " + i).collect(Collectors.toList());
 			
-			ListSelect<String> listOfUsers = new ListSelect<>("Select an option", data);
+			TwinColSelect<String> listOfUsers = new TwinColSelect<>("Select an option", data);
 			listOfUsers.setRows(10);
-			listOfUsers.setWidth(150.0f, Unit.PIXELS);
+			listOfUsers.setWidth(100.0f, Unit.PERCENTAGE);
+//			listOfUsers.setWidth(150.0f, Unit.PIXELS);
 //			listOfUsers.setMultiSelect( true );
 //			listOfUsers.addValueChangeListener(event -> Notification.show("Value changed:", String.valueOf(((Label) event).getValue()),
 //					Type.TRAY_NOTIFICATION));
@@ -163,15 +166,15 @@ public class GroupDescriptor extends Descriptor
 	        return listOfUsers;
 		}
 		
-		private ListSelect getCurrentList()
-		{
-			List<String> data = new LinkedList<String>();
-			
-			ListSelect<String> listOfUsers = new ListSelect<>("Select an option", data);
-			listOfUsers.setRows(10);
-			listOfUsers.setWidth(150.0f, Unit.PIXELS);
-//			listOfUsers.setMultiSelect( true );
-	        return listOfUsers;
-		}
+//		private ListSelect getCurrentList()
+//		{
+//			List<String> data = new LinkedList<String>();
+//			
+//			ListSelect<String> listOfUsers = new ListSelect<>("Select an option", data);
+//			listOfUsers.setRows(10);
+//			listOfUsers.setWidth(150.0f, Unit.PIXELS);
+////			listOfUsers.setMultiSelect( true );
+//	        return listOfUsers;
+//		}
 	}
 }
