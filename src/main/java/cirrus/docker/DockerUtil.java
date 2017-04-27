@@ -6,14 +6,14 @@ import java.io.PrintWriter;
 import java.util.List;
 
 public class DockerUtil {
-	public static String createTmpSrcDir(List<String> srcContents, String srcExtension) {
+	public static String createTmpSrcDir(List<String> srcContents, Language lang) {
 		File temp = null;
 		try {
 			temp = File.createTempFile("CD" + System.currentTimeMillis(), "");
 			temp.delete();
 			temp.mkdir();
 			for (int i = 0; i < srcContents.size(); i++) {
-				try (PrintWriter out = new PrintWriter(temp.getAbsolutePath() + "/" + i + "." + srcExtension)) {
+				try (PrintWriter out = new PrintWriter(temp.getAbsolutePath() + "/" + i + "." + lang.getExtension())) {
 					out.println(srcContents.get(i));
 					out.flush();
 				}
