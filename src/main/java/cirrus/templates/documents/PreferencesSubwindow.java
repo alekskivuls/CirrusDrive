@@ -48,11 +48,12 @@ public class PreferencesSubwindow extends Window {
 		// TODO: Figure out how to move style code to CSS file
 		StringBuilder sb = new StringBuilder("var panel = document.querySelector('div.v-panel-content');");
 		sb.append("var textPanel = document.querySelector('.v-panel-content'); var textArea = document.querySelector('textarea');")
-			.append("var p = document.createElement('div');p.classList.add('lineNumbers');p.style.setProperty('position','absolute');")
-			.append("p.style.setProperty('width','30px');p.style.setProperty('height','100%');textArea.style.setProperty('padding-left','30px');")
-			.append("textArea.style.setProperty('font-family','courier'); p.style.setProperty('font-family','courier');textPanel.insertBefore(p, textArea);")
-			.append("for (var i = 1; i <= 50; i++) {var num = document.createElement('p');num.innerHTML = i;p.appendChild(num);num.style.setProperty('margin','0');}")
-			.append("p.style.setProperty('margin','0'); p.style.setProperty('border','solid .5px #ddd');");
+			.append("var p = document.createElement('div');p.classList.add('lineNumbers');p.style.position = 'absolute';")
+			.append("p.style.width = '30px'; p.style.height = '100%'; textArea.style.paddingLeft = '30px';")
+			.append("textArea.style.fontFamily = 'courier'; p.style.fontFamily = 'courier'; textPanel.insertBefore(p, textArea);")
+			.append("for (var i = 1; i <= 50; i++) {var num = document.createElement('div');num.innerHTML = i;p.appendChild(num);num.style.margin = '0';")
+			.append("num.style.height ='18px';textArea.style.paddingTop = '3px';}")
+			.append("p.style.margin = '0'; p.style.border ='solid .5px #ddd';");
 								
 		String script = sb.toString();	
 		JavaScript.getCurrent().execute(script);
