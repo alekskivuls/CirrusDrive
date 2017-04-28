@@ -1,6 +1,8 @@
 
 package cirrus.backend;
 
+import java.util.List;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import cirrus.docker.Language;
@@ -19,6 +21,9 @@ public interface DocumentBackend {
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	User getCurrentUser();
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    List<User> getAllUsers();
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
 	String buildProgram(String programSrc, Language lang);

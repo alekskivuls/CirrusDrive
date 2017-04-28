@@ -71,9 +71,9 @@ public class Application {
 			// save a couple of customers
 			repository.save(new User("adoe", "ad", "Alice", "Doe", Role.ADMIN));
 			repository.save(new User("bdoe", "bd", "Bob", "Doe", Role.USER));
-			User regular = new User("user", "password", "first", "last", Role.USER);
+			User regular = new User("user", "password", "Regular", "last", Role.USER);
 			repository.save(regular);
-			User admin = new User("admin", "password", "first", "last", Role.ADMIN);
+			User admin = new User("admin", "password", "Admin", "last", Role.ADMIN);
 			repository.save(admin);
 
 			// fetch all users
@@ -119,6 +119,7 @@ public class Application {
 			System.out.println();
 			
 			UserGroup group1 = new UserGroup("regGroup", regular);
+			group1.addGroupMember(admin);
 			groupRepo.save(group1);
 			UserGroup group2 = new UserGroup("adminGroup1", admin);
 			groupRepo.save(group2);

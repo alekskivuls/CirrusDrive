@@ -1,11 +1,15 @@
 package cirrus.models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 
@@ -16,7 +20,9 @@ public class UserGroup {
 	@GeneratedValue( strategy = GenerationType.AUTO)
 	private int groupId;
 	private String groupLabel;
-	private HashSet<User> groupMembers;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	private List<User> groupMembers;
 	
 	@ManyToOne
 	private User groupOwner;
@@ -28,10 +34,10 @@ public class UserGroup {
 	public UserGroup(String groupLabel, User groupOwner) {
 		this.groupLabel = groupLabel;
 		this.groupOwner = groupOwner;
-		this.groupMembers = new HashSet<User>();
+		this.groupMembers = new ArrayList<User>();
 	}
 	
-	public UserGroup(String groupLabel, User groupOwner, HashSet<User> groupMembers){
+	public UserGroup(String groupLabel, User groupOwner, List<User> groupMembers){
 		this.groupLabel = groupLabel;
 		this.groupOwner = groupOwner;
 		this.groupMembers = groupMembers;
@@ -58,11 +64,16 @@ public class UserGroup {
 		groupMembers.remove(user);
 	}
 	
-	public HashSet<User> getGroupMembers() {
+	public List<User> getGroupMembers() {
 		return groupMembers;
 	}
+	
+	public User getGroupOwner() {
+		return this.groupOwner;
+		
+	}
 
-	public void setGroupMembers(HashSet<User> groupMembers) {
+	public void setGroupMembers(List<User> groupMembers) {
 		this.groupMembers = groupMembers;
 	}
 
@@ -75,10 +86,5 @@ public class UserGroup {
 		return "Group [groupLabel=" + groupLabel + ", groupId=" + groupId + ", groupOwner=" + groupOwner.getUserName() + 
 				", groupMembers=" + members + "]";
 	}
-	
-	
-	
-	
-	
 
 }
