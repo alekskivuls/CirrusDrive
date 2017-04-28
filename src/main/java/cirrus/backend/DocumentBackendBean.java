@@ -4,6 +4,7 @@ package cirrus.backend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cirrus.docker.Language;
 import cirrus.models.Document;
 import cirrus.models.User;
 import cirrus.services.DockerService;
@@ -18,10 +19,10 @@ public class DocumentBackendBean implements DocumentBackend {
 
 	@Autowired
 	UsersService userService;
-	
+
 	@Autowired
 	DockerService dockerService;
-	
+
 	@Override
 	public void saveDocument(Document doc) {
 		documentService.saveDocument(doc);
@@ -41,10 +42,15 @@ public class DocumentBackendBean implements DocumentBackend {
 	public void deleteDocument(int docId) {
 		documentService.deleteDocument(docId);
 	}
-	
+
 	@Override
-	public String runProgram(String programSrc) {
-		return dockerService.runProgram(programSrc);
+	public String buildProgram(String programSrc, Language lang) {
+		return dockerService.buildProgram(programSrc, lang);
 	}
-	
+
+	@Override
+	public String runProgram(String programSrc, Language lang) {
+		return dockerService.runProgram(programSrc, lang);
+	}
+
 }

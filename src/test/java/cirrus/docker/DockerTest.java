@@ -19,7 +19,7 @@ public class DockerTest {
 	@Test
 	public void fullTest() {
 		Docker docker = new Docker();
-		String srcDir = DockerUtil.createTmpSrcDir(Arrays.asList(programSrc), "java");
+		String srcDir = DockerUtil.createTmpSrcDir(Arrays.asList(programSrc), Language.JAVA);
 		String containerId = docker.createContainer(Language.JAVA, srcDir, "0.java");
 		docker.startContainer(containerId);
 		docker.waitContainer(containerId);

@@ -16,9 +16,17 @@ public class DockerService {
 		docker = new Docker();
 	}
 
-	public String runProgram(String programSrc) {
-		String srcDir = DockerUtil.createTmpSrcDir(Arrays.asList(programSrc), "java");
-		String containerId = docker.createContainer(Language.JAVA, srcDir, "0.java");
+	public String buildProgram(String programSrc, Language lang) {
+		String srcDir = DockerUtil.createTmpSrcDir(Arrays.asList(programSrc), lang);
+		String containerId = docker.createContainer(lang, srcDir, "0." + lang.getExtension());
+		String logs = docker.readContainerLogs(containerId);
+		docker.removeContainer(containerId);
+		return logs;
+	}
+
+	public String runProgram(String programSrc, Language lang) {
+		String srcDir = DockerUtil.createTmpSrcDir(Arrays.asList(programSrc), lang);
+		String containerId = docker.createContainer(lang, srcDir, "0." + lang.getExtension());
 		docker.startContainer(containerId);
 		docker.waitContainer(containerId);
 		String logs = docker.readContainerLogs(containerId);
