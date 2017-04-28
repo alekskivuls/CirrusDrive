@@ -17,7 +17,6 @@ import com.vaadin.ui.VerticalLayout;
 
 import cirrus.Sections;
 import cirrus.backend.DocumentBackend;
-import cirrus.docker.Language;
 import cirrus.models.Document;
 import cirrus.templates.documents.BuildMenuBar;
 import cirrus.templates.documents.DocumentPanel;
@@ -91,20 +90,9 @@ public class DocumentView extends VerticalLayout implements View {
 		}
 	}
 
-	public void buildProgram() {
-		Language lang = Language.fromExtension(getCurrFileExtension());
-		if (lang != null) {
-			String result = mBackend.buildProgram(doc.getDocBody(), lang);
-			documentTabs.appendConsole(result);
-		}
-	}
-
 	public void runProgram() {
-		Language lang = Language.fromExtension(getCurrFileExtension());
-		if (lang != null) {
-			String result = mBackend.runProgram(doc.getDocBody(), lang);
-			documentTabs.appendConsole(result);
-		}
+		String result = mBackend.runProgram(doc.getDocBody());
+		documentTabs.appendConsole(result);
 	}
 
 	public void save() {
@@ -123,24 +111,18 @@ public class DocumentView extends VerticalLayout implements View {
 		try {
 			UI.getCurrent().addWindow(prefWindow);
 		} catch (Exception e) {
-			// Window is already visible
+			//Window is already visible
 		}
 	}
-
+	
 	public void tabToIndent() {
-		StringBuilder sb = new StringBuilder("var textarea = document.querySelector('.v-textarea');");
+		StringBuilder sb = new StringBuilder("textArea.setAttribute('spellcheck','false'); var textarea = document.querySelector('.v-textarea');");
 		sb.append("textarea.addEventListener('keydown', function(e) {")
-				.append("if(e.key == 'Tab') { e.preventDefault(); var s = this.selectionStart;")
-				.append("this.value = this.value.substring(0, this.selectionStart) + '\t' + this.value.substring(this.selectionEnd);")
-				.append("this.selectionEnd = s + 1;}});");
-
-		String script = sb.toString();
+			.append("if(e.key == 'Tab') { e.preventDefault(); var s = this.selectionStart;")
+			.append("this.value = this.value.substring(0, this.selectionStart) + '\t' + this.value.substring(this.selectionEnd);")
+			.append("this.selectionEnd = s + 1;}});");
+								
+		String script = sb.toString();	
 		JavaScript.getCurrent().execute(script);
-	}
-
-	private String getCurrFileExtension() {
-		String docName = doc.getDocName();
-		int extIndex = docName.lastIndexOf('.');
-		return extIndex != -1 ? docName.substring(extIndex + 1) : "";
 	}
 }
