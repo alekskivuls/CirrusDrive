@@ -53,6 +53,7 @@ public class PreferencesSubwindow extends Window {
 			.append("textArea.style.fontFamily = 'courier'; p.style.fontFamily = 'courier'; textPanel.insertBefore(p, textArea);")
 			.append("for (var i = 1; i <= 50; i++) {var num = document.createElement('div');num.innerHTML = i;p.appendChild(num);num.style.margin = '0';")
 			.append("num.style.height ='18px';textArea.style.paddingTop = '3px';}")
+			.append("textArea.setAttribute('spellcheck','off');")
 			.append("p.style.margin = '0'; p.style.border ='solid .5px #ddd';");
 								
 		String script = sb.toString();	
