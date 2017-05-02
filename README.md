@@ -1,4 +1,4 @@
-![Build Status](https://travis-ci.org/alekskivuls/CirrusDrive.svg?branch=master)
+[![Build Status](https://travis-ci.org/alekskivuls/CirrusDrive.svg?branch=master)](https://travis-ci.org/alekskivuls/CirrusDrive)
 
 # CirrusDrive
 Cloud data storage and code execution.
