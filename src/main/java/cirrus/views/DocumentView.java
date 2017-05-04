@@ -58,6 +58,7 @@ public class DocumentView extends VerticalLayout implements View {
 		this.addComponent(docNameField);
 
 		buildMenuBar = new BuildMenuBar();
+		buildMenuBar.setBuildCmd(e -> buildProgram());
 		buildMenuBar.setRunCmd(e -> runProgram());
 		this.addComponent(buildMenuBar);
 
