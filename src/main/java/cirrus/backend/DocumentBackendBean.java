@@ -1,6 +1,8 @@
 
 package cirrus.backend;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +40,11 @@ public class DocumentBackendBean implements DocumentBackend {
 		return userService.getCurrentUser();
 	}
 
+	@Override
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+	
 	@Override
 	public void deleteDocument(int docId) {
 		documentService.deleteDocument(docId);

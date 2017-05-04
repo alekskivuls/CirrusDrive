@@ -43,8 +43,7 @@ public class HomeView extends VerticalLayout implements View {
 	private long clickTimer;
 	private Window subwindow;
 	
-	public HomeView(Backend backend, DocumentBackend docBackend)
-	{
+	public HomeView(Backend backend, DocumentBackend docBackend) {
 		this.mBackend = backend;
 		this.dBackend = docBackend;
 		setSizeFull();
@@ -101,27 +100,6 @@ public class HomeView extends VerticalLayout implements View {
 		
 		addComponent(titleBar);
 		
-		/*
-		// Old Button -------------------------------------------------
-		Button addDocBtn = new Button(FontAwesome.PLUS);
-		addDocBtn.setDescription("Add a new document");
-		addDocBtn.setSizeUndefined();
-		
-		addDocBtn.addClickListener(new Button.ClickListener()
-		{
-			public void buttonClick(ClickEvent event)
-			{
-				getUI().getNavigator().navigateTo("document");
-			}
-		});
-		
-		titleBar.addComponent(addDocBtn);
-		titleBar.setComponentAlignment(addDocBtn, Alignment.TOP_RIGHT);
-		
-		addComponent(titleBar);
-		//-------------------------------------------------------------
-		*/
-		
 		// Main layout to hold the panel
         HorizontalLayout mainLayout = new HorizontalLayout();
         mainLayout.setSizeFull();
@@ -134,7 +112,7 @@ public class HomeView extends VerticalLayout implements View {
         });
      
         // Panel that displays documents
-        Panel panel = createPanel();       
+        Panel panel = createMainPanel();       
         mainLayout.addComponent(panel);
         mainLayout.setExpandRatio(panel, 1.0f);
         
@@ -151,7 +129,7 @@ public class HomeView extends VerticalLayout implements View {
 	}
 	
 	// document list
-	private Panel createPanel() {
+	private Panel createMainPanel() {
 		Panel panel = new Panel();
 		//CssLayout layout = new CssLayout();
 		HorizontalLayout layout = new HorizontalLayout();
@@ -164,10 +142,8 @@ public class HomeView extends VerticalLayout implements View {
 			button.setData(doc);
 			button.setIcon(FontAwesome.FOLDER);
 			//button.addStyleName(BaseTheme.BUTTON_LINK);
-			button.addClickListener(new Button.ClickListener()
-			{
-				public void buttonClick(ClickEvent event)
-				{
+			button.addClickListener(new Button.ClickListener() {
+				public void buttonClick(ClickEvent event) {
 					Document doc = (Document) event.getButton().getData();
 					// When successfully double clicked
 					if (doubleClicked && bTemp.equals(event.getButton()) && System.currentTimeMillis()-clickTimer < 500) {
@@ -186,7 +162,7 @@ public class HomeView extends VerticalLayout implements View {
 						
 						// Generate and show side-panel
 						sidePanel.setVisible(true);
-						sidePanel.setContent(genSidePanelContent(doc));
+						sidePanel.setContent(createSidePanel(doc));
 						
 						button.setIcon(FontAwesome.FOLDER);
 					}
@@ -201,10 +177,8 @@ public class HomeView extends VerticalLayout implements View {
 		return panel;
 	}
 	
-	FormLayout genSidePanelContent(Document doc) {
+	FormLayout createSidePanel(Document doc) {
 		FormLayout content = new FormLayout();
-		
-		content.addStyleName("mypanelcontent");
 		content.addComponent(new Label("<b>Owner:</b> " + doc.getDocOwner().getUserName(), ContentMode.HTML));
 		content.addComponent(new Label("<b>Name:</b> " + doc.getDocName(), ContentMode.HTML));
 		content.addComponent(new Label("<b>Description:</b> " + doc.getDocDescription(), ContentMode.HTML));
@@ -214,7 +188,6 @@ public class HomeView extends VerticalLayout implements View {
 			content.addComponent(new Label("<b>Modified:</b> " + doc.getModifyDate(), ContentMode.HTML));
 		
 		content.setSizeFull();
-		
 		return content;
 	}
 	

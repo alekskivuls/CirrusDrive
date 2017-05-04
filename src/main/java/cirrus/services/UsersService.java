@@ -1,5 +1,7 @@
 package cirrus.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.vaadin.spring.security.VaadinSecurity;
@@ -23,5 +25,9 @@ public class UsersService {
 	public User getCurrentUser() {
 		String userName = vaadinSecurity.getAuthentication().getName();
 		return getUser(userName);
+	}
+	
+	public List<User> getAllUsers() {
+		return repo.findAll();
 	}
 }

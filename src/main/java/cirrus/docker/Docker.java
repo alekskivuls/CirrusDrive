@@ -17,7 +17,9 @@ import com.spotify.docker.client.messages.HostConfig.Bind;
 import com.spotify.docker.client.messages.HostConfig.Builder;
 
 public class Docker {
-	DockerClient docker;
+	private DockerClient docker;
+	/** Destination to mount file inside container */
+	private final String MOUNT_DEST = "/mnt";
 
 	public Docker() {
 		// Create a client based on DOCKER_HOST and DOCKER_CERT_PATH env vars
@@ -28,27 +30,28 @@ public class Docker {
 		}
 	}
 
-	public String createContainer(Language lang, String srcDir, String mainFile, String... srcFiles) {
-		String srcs = "src/" + mainFile;
+	public String createBuildContainer(Language lang, String srcDir, String mainFile, String... srcFiles) {
+		String srcs = mainFile;
 		for (String src : srcFiles) {
-			srcs += " src/" + src;
+			srcs += " " + src;
 		}
+		String containerName = null;
 		try {
-			switch (lang) {
-			case JAVA:
-				return createContainer(srcDir, "javac -encoding UTF-8 -sourcepath . -d . " + srcs,
-						"java main");// + mainFile.substring(0, mainFile.lastIndexOf('.')));
-			case PYTHON:
-				return createContainer(srcDir, "python3 src/" + mainFile);
-			case CPP:
-				return createContainer(srcDir, "g++ " + srcs, "./a.out");
-			default:
-				throw new Exception("Language not supported");
-			}
+			containerName = createContainer(srcDir, lang.getBuildCmd() + srcs);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return containerName;
+	}
+
+	public String createRunContainer(Language lang, String binDir, String mainFile) {
+		String containerName = null;
+		try {
+			containerName = createContainer(binDir, lang.getRunCmd() + mainFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return containerName;
 	}
 
 	private String createContainer(String mountDir, String... args)
@@ -64,12 +67,11 @@ public class Docker {
 			throws DockerCertificateException, DockerException, InterruptedException {
 		Builder configBuilder = HostConfig.builder();
 		if (mountDir != null) {
-			//String srcPath = Docker.class.getResource(mountDir).getPath();
-			configBuilder.appendBinds(Bind.from(mountDir).to("/src").readOnly(true).build());
+			configBuilder.appendBinds(Bind.from(mountDir).to(MOUNT_DEST).build());
 		}
 		final HostConfig hostConfig = configBuilder.build();
 
-		String shellScript = "";
+		String shellScript = "cd " + MOUNT_DEST + ";";
 		for (String cmd : commands) {
 			shellScript += cmd + ';';
 		}
