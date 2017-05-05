@@ -127,16 +127,14 @@ public class DocumentView extends VerticalLayout implements View {
 			// Window is already visible
 		}
 	}
-
+	
 	public void tabToIndent() {
-		StringBuilder sb = new StringBuilder(
-				"textArea.setAttribute('spellcheck','false'); var textarea = document.querySelector('.v-textarea');");
-		sb.append("textarea.addEventListener('keydown', function(e) {")
-				.append("if(e.key == 'Tab') { e.preventDefault(); var s = this.selectionStart;")
-				.append("this.value = this.value.substring(0, this.selectionStart) + '\t' + this.value.substring(this.selectionEnd);")
-				.append("this.selectionEnd = s + 1;}});");
-
-		String script = sb.toString();
+		String script = "var textarea = document.querySelector('.v-textarea');textarea.setAttribute('spellcheck','false');"
+				+ "textarea.addEventListener('keydown', function(e) {if(e.key == 'Tab') { e.preventDefault(); var s = this.selectionStart;"
+				+ "if(e.shiftKey){var start = this.value.lastIndexOf('\\n',s);if (this.value.substring(s, s+1) == '\\n') {start = this.value.lastIndexOf('\\n', s - 1) }"
+				+ "if (start === -1) {start = 0;}var end = this.value.indexOf('\\n', s);var slice = this.value.slice(start,end);var slice2 = slice.replace('\\t','');"
+				+ "this.value = this.value.replace(slice, slice2);if (slice != slice2){this.selectionEnd = s - 1;}else{this.selectionEnd = s;}}"
+				+ "else {this.value = this.value.substring(0, this.selectionStart) + '\\t' + this.value.substring(this.selectionEnd);this.selectionEnd = s + 1;}}});";
 		JavaScript.getCurrent().execute(script);
 	}
 
