@@ -26,7 +26,7 @@ public class DockerTest {
 		docker.removeContainer(containerId);
 		assertEquals("", logs);
 		
-		containerId = docker.createRunContainer(Language.JAVA, srcDir, "main");
+		containerId = docker.createRunContainer(Language.JAVA, srcDir, "");
 		docker.startContainer(containerId);
 		docker.waitContainer(containerId);
 		logs = docker.readContainerLogs(containerId);

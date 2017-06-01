@@ -28,7 +28,7 @@ public class DocumentTabs extends TabSheet {
 
 			final VerticalLayout tab = new VerticalLayout(console);
 			tab.setMargin(true);
-			tab.setSizeFull();
+			//tab.setSizeFull();
 
 			addTab(tab, tabNames[i]);
 		}
