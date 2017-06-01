@@ -1,25 +1,32 @@
 package cirrus.docker;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.spotify.docker.client.DefaultDockerClient;
 import com.spotify.docker.client.DockerClient;
 import com.spotify.docker.client.DockerClient.LogsParam;
 import com.spotify.docker.client.LogStream;
+import com.spotify.docker.client.ProgressHandler;
 import com.spotify.docker.client.exceptions.DockerCertificateException;
 import com.spotify.docker.client.exceptions.DockerException;
+import com.spotify.docker.client.exceptions.ImageNotFoundException;
 import com.spotify.docker.client.messages.ContainerConfig;
 import com.spotify.docker.client.messages.ContainerCreation;
 import com.spotify.docker.client.messages.ContainerInfo;
 import com.spotify.docker.client.messages.HostConfig;
 import com.spotify.docker.client.messages.HostConfig.Bind;
 import com.spotify.docker.client.messages.HostConfig.Builder;
+import com.spotify.docker.client.messages.ProgressMessage;
 
 public class Docker {
 	private DockerClient docker;
 	/** Destination to mount file inside container */
 	private final String MOUNT_DEST = "/mnt";
+	private final String IMAGE_NAME = "cirrusbox";
 
 	public Docker() {
 		// Create a client based on DOCKER_HOST and DOCKER_CERT_PATH env vars
@@ -28,6 +35,15 @@ public class Docker {
 		} catch (DockerCertificateException e) {
 			e.printStackTrace();
 		}
+		// Test if the image is built yet, build it if it's not
+		try {
+			docker.inspectImage(IMAGE_NAME);
+		} catch (ImageNotFoundException e) {
+			buildImage();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public String createBuildContainer(Language lang, String srcDir, String mainFile, String... srcFiles) {
@@ -75,7 +91,7 @@ public class Docker {
 		for (String cmd : commands) {
 			shellScript += cmd + ';';
 		}
-		final ContainerConfig containerConfig = ContainerConfig.builder().hostConfig(hostConfig).image("cirrusbox")
+		final ContainerConfig containerConfig = ContainerConfig.builder().hostConfig(hostConfig).image(IMAGE_NAME)
 				.cmd("sh", "-c", shellScript).build();
 
 		final ContainerCreation creation = docker.createContainer(containerConfig);
@@ -135,6 +151,23 @@ public class Docker {
 		try {
 			docker.removeContainer(containerId);
 		} catch (DockerException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void buildImage() {
+		final AtomicReference<String> imageIdFromMessage = new AtomicReference<>();
+		try {
+			docker.build(Paths.get(""), IMAGE_NAME, new ProgressHandler() {
+				@Override
+				public void progress(ProgressMessage message) throws DockerException {
+					final String imageId = message.buildImageId();
+					if (imageId != null) {
+						imageIdFromMessage.set(imageId);
+					}
+				}
+			});
+		} catch (DockerException | InterruptedException | IOException e) {
 			e.printStackTrace();
 		}
 	}
