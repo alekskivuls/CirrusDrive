@@ -2,8 +2,8 @@ package cirrus.docker;
 
 public enum Language {
 
-	JAVA("java", "javac -encoding UTF-8 -sourcepath . -d . ", "java "), CPP("cpp", "g++", "./a.out"), PYTHON("py",
-			"python3 -m compileall", "python3");
+	JAVA("java", "javac -encoding UTF-8 -sourcepath . -d . ", "java main"), CPP("cpp", "g++ ", "./a.out"), PYTHON("py",
+			"python3 -m compileall ", "python3 0.py");
 
 	private final String extension, buildCmd, runCmd;
 

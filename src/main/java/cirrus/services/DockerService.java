@@ -31,7 +31,7 @@ public class DockerService {
 	public String runProgram(String programSrc, Language lang) {
 		if (currBuildDir == null)
 			return "";
-		String containerId = docker.createRunContainer(lang, currBuildDir, "main");
+		String containerId = docker.createRunContainer(lang, currBuildDir, "");
 		docker.startContainer(containerId);
 		docker.waitContainer(containerId);
 		String logs = docker.readContainerLogs(containerId);

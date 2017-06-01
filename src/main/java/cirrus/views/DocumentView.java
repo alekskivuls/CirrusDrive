@@ -93,6 +93,7 @@ public class DocumentView extends VerticalLayout implements View {
 	}
 
 	public void buildProgram() {
+		save();
 		Language lang = Language.fromExtension(getCurrFileExtension());
 		if (lang != null) {
 			String result = mBackend.buildProgram(doc.getDocBody(), lang);
